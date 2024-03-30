@@ -1,0 +1,14 @@
+graphdatascience
+retry
+langchain
+langchain-openai
+streamlit
+streamlit-chat
+streamlit-chat-media
+numpy
+pandas
+requests
+plotly
+tqdm
+altair<5
+streamlit_code_editor

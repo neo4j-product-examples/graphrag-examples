@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2725.18 673.79">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-2 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-3 {
+        fill: #014063;
+        font-family: PTSans-Bold, 'PT Sans';
+        font-size: 600px;
+        font-weight: 700;
+        isolation: isolate;
+      }
+    </style>
+  </defs>
+  <text class="cls-3" transform="translate(0 509.99)"><tspan x="0" y="0">Graph</tspan><tspan class="cls-2" x="1524.58" y="0">R</tspan><tspan class="cls-1" x="1863.58" y="0">A</tspan><tspan x="2207.99" y="0">G </tspan></text>
+</svg>
