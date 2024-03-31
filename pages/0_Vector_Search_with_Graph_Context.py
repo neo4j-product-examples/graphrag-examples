@@ -9,8 +9,7 @@ render_header_svg("images/graphrag.svg", 200)
 
 render_header_svg("images/bottom-header.svg", 200)
 
-graph_retrieval_query = """
-WITH node AS product, score 
+graph_retrieval_query = """WITH node AS product, score 
 MATCH (product)<-[:ORDER_CONTAINS]-(o:Order)<-[:ORDERED]-(c:Customer)
 MATCH (product)-[:SUPPLIED_BY]->(s:Supplier)
 WITH product, s, c, count(*) AS orderCount, score
@@ -69,50 +68,100 @@ graphrag_chain = GraphRAGChain(
     graph_retrieval_query=graph_retrieval_query,
     k=top_k)
 
-prompt = st.text_input("Submit a prompt:", value="")
+prompt = st.text_input("submit a prompt:", value="")
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Vector Only")
-
-    with st.expander("Just Vector Search Retrieval:"):
-        st.markdown("#### No Additional Context")
-        st.markdown(f"""
-        This will just do a vector search for retrieval.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes)
-        """)
     if prompt:
-        with st.spinner('Running GraphRAG...'):
-            st.markdown(vector_only_rag_chain.invoke(prompt))
-            with st.expander("Context used to answer this prompt:"):
-                st.markdown("#### Context Pulled from Database")
-                st.code(vector_only_rag_chain.last_used_context, language='json')
+        with st.spinner('Running Vector Only RAG...'):
+            with st.expander('__Response:__', True):
+                st.markdown(vector_only_rag_chain.invoke(prompt))
+            with st.expander("__Context used to answer this prompt:__"):
+                st.json(vector_only_rag_chain.last_used_context)
+            with st.expander("__Query used to retrieve context:__"):
+                vector_rag_query = vector_only_rag_chain.get_browser_queries(prompt)
+                st.markdown(f"""
+                This query only uses vector search.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes)
+                """)
+                st.code(vector_rag_query['query_body'], language='cypher')
+
             st.success('Done!')
 
 with col2:
     st.subheader("Vector Search & Graph Context")
 
-    with st.expander("Incorporate Graph Context to Vector Search Results:"):
-        st.markdown("#### Cypher Query For Additional Graph Context")
-        st.markdown(f"""
-        The following Cypher was used to achieve additional context from the graph. This query is run after the vector search.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes) . The below query then takes those nodes and scores and performs additional graph traversals and aggregation logic to obtain context.  In some ways you can think of this additional context as 'metadata' with the added benfitis of it being collected in real-time with the ability tp use very flecxible and robust patterns to do so. 
-        """)
-        st.code(graph_retrieval_query, language='cypher')
-
     if prompt:
         with st.spinner('Running GraphRAG...'):
-            st.markdown(graphrag_chain.invoke(prompt))
-            with st.expander("Context used to answer this prompt:"):
-                st.markdown("#### Context Pulled from Database")
-                st.code(graphrag_chain.last_used_context, language='json')
+            with st.expander('__Response:__', True):
+                st.markdown(graphrag_chain.invoke(prompt))
+
+            with st.expander("__Context used to answer this prompt:__"):
+                st.json(graphrag_chain.last_used_context)
+
+            with st.expander("__Query used to retrieve context:__"):
+                graph_rag_query = graphrag_chain.get_browser_queries(prompt)
+                st.markdown(f"""
+                The following Cypher was used to achieve vector results with additional context from the graph.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes) . The below query then takes those nodes and scores and performs additional graph traversals and aggregation logic to obtain context.  In some ways you can think of this additional context as 'metadata' with the added benfitis of it being collected in real-time with the ability tp use very flecxible and robust patterns to do so. 
+                """)
+                st.code(graph_rag_query['query_body'], language='cypher')
+
             st.success('Done!')
+if prompt:
+    st.markdown('### Visualize Retrieval in Neo4j')
+    st.markdown('To explore the results in Neo4j do the following:\n' +
+                '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                '* In the Query panel run the below command to store parameters for the vector index, top k, and embedding query vector:')
+    st.code(graph_rag_query['params_query'], language='cypher')
+    st.markdown(
+        '''* run the retrieval query from either of the above __"Query used to retrieve context"__ sections. Note to visualize subgraphs, it is helpful to take out specific property logic, using just the MATCH cluases and returning all nodes and relationships:''')
+    st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
 
-css='''
+st.markdown("---")
+
+st.markdown("""
 <style>
-    [data-testid="stExpander"] div:has(>.streamlit-expanderContent) {
-        overflow: scroll;
-        height: 400px;
-    }
-</style>
-'''
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none !important;
+    font-family: "Source Sans Pro", sans-serif;
+    color: rgba(49, 51, 63, 0.6);
+    font-size: 0.9rem;
+  }
 
-st.markdown(css, unsafe_allow_html=True)
+  tr {
+    border: none !important;
+  }
+
+  th {
+    text-align: center;
+    colspan: 3;
+    border: none !important;
+    color: #0F9D58;
+  }
+
+  th, td {
+    padding: 2px;
+    border: none !important;
+  }
+</style>
+
+<table>
+  <tr>
+    <th colspan="3">Sample questions to try</th>
+  </tr>
+  <tr>
+    <td>What are the most popular cheeses? What customers buy the most of these?</td>
+    <td>What are the most popular cheeses? What else can you recommend to go with?</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>What customers are buying the most caffeinated beverages? Can you also list the beverages and the amount they are buying?</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+""", unsafe_allow_html=True)
