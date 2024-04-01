@@ -1,8 +1,9 @@
 import json
 from collections import OrderedDict
-from typing import Dict
+from typing import Dict, List
 
 from langchain.prompts.prompt import PromptTemplate
+from langchain_community.graphs.neo4j_graph import Neo4jGraph
 from langchain_community.vectorstores.neo4j_vector import Neo4jVector
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
@@ -24,8 +25,41 @@ PROMPT_CONTEXT_TEMPLATE = """
 {input}
 
 # Here is the context:
-
 {context}
+"""
+
+T2C_PROMPT_TEMPLATE = '''
+# Ask:
+{input}
+
+Remove english explanation, provide just the Cypher code. 
+'''
+T2C_RESPONSE_PROMPT_TEMPLATE = """
+Transform below data to human readable format with bullets if needed, And summarize it in a sentence or two if possible
+# Sample Ask and Response :
+## Ask:
+Get distinct watch terms ?
+
+## Response:
+[\"alert\",\"attorney\",\"bad\",\"canceled\",\"charge\"]
+
+## Output:
+Here are the distinct watch terms
+- "alert"
+- "attorney"
+- "bad"
+- "canceled"
+- "charge"
+
+# Generate similar output for below Ask and Response
+
+## Ask
+${input}
+
+## Response:
+${context}
+
+## Output: 
 """
 
 
@@ -34,6 +68,19 @@ def format_doc(doc: Document) -> Dict:
     res['text'] = doc.page_content
     res.update(doc.metadata)
     return res
+
+
+def remove_key_from_dict(x, keys_to_remove):
+    if isinstance(x, dict):
+        x_clean = dict()
+        for k, v in x.items():
+            if k not in keys_to_remove:
+                x_clean[k] = remove_key_from_dict(v, keys_to_remove)
+    elif isinstance(x, list):
+        x_clean = [remove_key_from_dict(i, keys_to_remove) for i in x]
+    else:
+        x_clean = x
+    return x_clean
 
 
 class GraphRAGChain:
@@ -96,3 +143,40 @@ YIELD node, score
 YIELD node, score
 """
         return {'params_query': params_query, 'query_body': query_head + self.retrieval_query}
+
+
+class GraphRAGText2CypherChain:
+    def __init__(self, prompt_instructions: str, properties_to_remove_from_cypher_res: List = None):
+        self.store = Neo4jGraph(
+            url=NEO4J_URI,
+            username=NEO4J_USERNAME,
+            password=NEO4J_PASSWORD,
+        )
+        self.t2c_prompt = PromptTemplate.from_template(prompt_instructions + T2C_PROMPT_TEMPLATE)
+        self.prompt = PromptTemplate.from_template(T2C_RESPONSE_PROMPT_TEMPLATE)
+        self.chain = ({
+                          'context': self.t2c_prompt | llm | StrOutputParser() | self._format_and_save_query | self.store.query | self._format_and_save_context,
+                          'input': RunnablePassthrough()
+                      }
+                      | self.prompt
+                      | llm
+                      | StrOutputParser())
+        #self.chain = self.t2c_prompt | llm | StrOutputParser() | self._format_and_save_query | self.store.query | self._format_and_save_context
+        self.last_used_context = None
+        self.last_retrieval_query = None
+        self.properties_to_remove_from_cypher_res = properties_to_remove_from_cypher_res
+
+    def _format_and_save_context(self, docs) -> str:
+        if self.properties_to_remove_from_cypher_res is not None:
+            docs = remove_key_from_dict(docs, self.properties_to_remove_from_cypher_res)
+        res = json.dumps(docs, indent=1)
+        self.last_used_context = res
+        return res
+
+    def _format_and_save_query(self, s) -> str:
+        self.last_retrieval_query = s
+        print(s)
+        return s
+
+    def invoke(self, prompt: str):
+        return self.chain.invoke(prompt)
