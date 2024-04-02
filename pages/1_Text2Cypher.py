@@ -61,11 +61,16 @@ with col1:
             with st.expander("__Context used to answer this prompt:__"):
                 st.json(vector_only_rag_chain.last_used_context)
             with st.expander("__Query used to retrieve context:__"):
-                vector_rag_query = vector_only_rag_chain.get_browser_queries(prompt)
+                vector_rag_query = vector_only_rag_chain.get_full_retrieval_query(prompt)
                 st.markdown(f"""
                 This query only uses vector search.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k_vector_only}` nodes)
                 """)
-                st.code(vector_rag_query['query_body'], language='cypher')
+                st.code(vector_rag_query, language='cypher')
+                st.markdown('### Visualize Retrieval in Neo4j')
+                st.markdown('To explore the results in Neo4j do the following:\n' +
+                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            '* In the Query panel run the above query')
+                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
 
             st.success('Done!')
 
@@ -85,6 +90,11 @@ with col2:
                 st.markdown(f"""
                 """)
                 st.code(graph_rag_query, language='cypher')
+                st.markdown('### Visualize Retrieval in Neo4j')
+                st.markdown('To explore the results in Neo4j do the following:\n' +
+                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            '* In the Query panel run the above query')
+                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
 
             st.success('Done!')
 

@@ -80,11 +80,16 @@ with col1:
             with st.expander("__Context used to answer this prompt:__"):
                 st.json(vector_only_rag_chain.last_used_context)
             with st.expander("__Query used to retrieve context:__"):
-                vector_rag_query = vector_only_rag_chain.get_browser_queries(prompt)
+                vector_rag_query = vector_only_rag_chain.get_full_retrieval_query(prompt)
                 st.markdown(f"""
                 This query only uses vector search.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes)
                 """)
-                st.code(vector_rag_query['query_body'], language='cypher')
+                st.code(vector_rag_query, language='cypher')
+                st.markdown('### Visualize Retrieval in Neo4j')
+                st.markdown('To explore the results in Neo4j do the following:\n' +
+                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            '* In the Query panel run the above query')
+                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
 
             st.success('Done!')
 
@@ -100,22 +105,20 @@ with col2:
                 st.json(graphrag_chain.last_used_context)
 
             with st.expander("__Query used to retrieve context:__"):
-                graph_rag_query = graphrag_chain.get_browser_queries(prompt)
+                graph_rag_query = graphrag_chain.get_full_retrieval_query(prompt)
                 st.markdown(f"""
                 The following Cypher was used to achieve vector results with additional context from the graph.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes) . The below query then takes those nodes and scores and performs additional graph traversals and aggregation logic to obtain context.  In some ways you can think of this additional context as 'metadata' with the added benfitis of it being collected in real-time with the ability tp use very flecxible and robust patterns to do so. 
                 """)
-                st.code(graph_rag_query['query_body'], language='cypher')
+                st.code(graph_rag_query, language='cypher')
+                st.markdown('### Visualize Retrieval in Neo4j')
+                st.markdown('To explore the results in Neo4j do the following:\n' +
+                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            '* In the Query panel run the above query')
+                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
 
             st.success('Done!')
-if prompt:
-    st.markdown('### Visualize Retrieval in Neo4j')
-    st.markdown('To explore the results in Neo4j do the following:\n' +
-                '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
-                '* In the Query panel run the below command to store parameters for the vector index, top k, and embedding query vector:')
-    st.code(graph_rag_query['params_query'], language='cypher')
-    st.markdown(
-        '''* run the retrieval query from either of the above __"Query used to retrieve context"__ sections. Note to visualize subgraphs, it is helpful to take out specific property logic, using just the MATCH cluases and returning all nodes and relationships:''')
-    st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+
+
 
 st.markdown("---")
 
@@ -152,11 +155,12 @@ st.markdown("""
     <th colspan="3">Sample questions to try</th>
   </tr>
   <tr>
-    <td>What are the most popular cheeses? What customers buy the most of these?</td>
-    <td>What are the most popular cheeses? What else can you recommend to go with?</td>
+    <td>What are 3 popular cheeses?</td>
+    <td>What are 3 popular cheeses? - How are you measuring popularity?</td>
+    <td>What are 3 popular cheeses? What else can you recommend to go with them? - How are you measuring popularity?</td>
   </tr>
   <tr>
-    <td></td>
+    <td>What are 3 popular cheeses? What customers buy the most of these?</td>
     <td>What customers are buying the most caffeinated beverages? Can you also list the beverages and the amount they are buying?</td>
   </tr>
   <tr>
