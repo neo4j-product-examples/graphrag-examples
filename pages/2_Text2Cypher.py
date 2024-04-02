@@ -87,3 +87,53 @@ with col2:
                 st.code(graph_rag_query, language='cypher')
 
             st.success('Done!')
+
+st.markdown("---")
+
+st.markdown("""
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none !important;
+    font-family: "Source Sans Pro", sans-serif;
+    color: rgba(49, 51, 63, 0.6);
+    font-size: 0.9rem;
+  }
+
+  tr {
+    border: none !important;
+  }
+
+  th {
+    text-align: center;
+    colspan: 3;
+    border: none !important;
+    color: #0F9D58;
+  }
+
+  th, td {
+    padding: 2px;
+    border: none !important;
+  }
+</style>
+
+<table>
+  <tr>
+    <th colspan="3">Sample questions to try</th>
+  </tr>
+  <tr>
+    <td>Find the top 10 customers by orders and get the 5 most common products among those orders</td>
+    <td>What are the products purchased often together? Provide only the top 10</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Who is the top customer in USA with highest number of orders with Beverages product category? Return the Bloom link for that customer</td>
+    <td>A customer is purchasing "Sir Rodney's Marmalade". What top 4 products can we recommend based on past customer transactions?</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+""", unsafe_allow_html=True)
