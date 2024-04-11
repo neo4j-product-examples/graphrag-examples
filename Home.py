@@ -9,7 +9,6 @@ render_header_svg("images/graphrag.svg", 200)
 
 render_header_svg("images/bottom-header.svg", 200)
 
-st.header('Sample Application')
+st.header('Sample Application Stack:')
 
-st.markdown('### Stack: ')
-st.image('images/stack.png', width=700)
+st.image('images/stack.png', width=400)
