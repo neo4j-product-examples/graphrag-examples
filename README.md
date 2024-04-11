@@ -2,7 +2,7 @@
 This repo contains a streamlit app for introducing and teaching example GraphRAG patterns.
 
 ## Loading Data
-This sample app uses the classic Northwind database. We will provide a script for loading the data from raw source and setting up the vector index. Until then you can use `neo4j.dump` file to automatically setup the database. 
+This sample app uses the classic Northwind database. We will provide a script for loading the data from raw source and setting up the text embeddings and vector index. Until then you can use `neo4j.dump` file to automatically setup the database with vectors and all. 
 
 ## Running the Streamlit App
 1. Create a `secrets.toml` file using `secrets.toml.example` as a template
