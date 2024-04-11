@@ -8,7 +8,7 @@ This sample app uses the classic Northwind database. We will provide a script fo
 1. Create a `secrets.toml` file using `secrets.toml.example` as a template
     ```bash
     cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-    vi .streamit/secrets.toml
+    vi .streamlit/secrets.toml
     ```
     fill in the below credentials.  You can use a blank sandbox or any other Neo4j instance.
     ```env
@@ -21,6 +21,6 @@ This sample app uses the classic Northwind database. We will provide a script fo
     NEO4J_PASSWORD = "<password>"
     ```
 
-2. Install requirements (recommended in an isolated python virtual environment): `pip install -r requirments.txt`
+2. Install requirements (recommended in an isolated python virtual environment): `pip install -r requirements.txt`
 3. Run app: `streamlit run Home.py --server.port=80`
 
