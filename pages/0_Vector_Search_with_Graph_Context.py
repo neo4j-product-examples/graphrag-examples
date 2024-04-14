@@ -6,8 +6,11 @@ from ui_utils import render_header_svg
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 
 render_header_svg("images/graphrag.svg", 200)
-
 render_header_svg("images/bottom-header.svg", 200)
+
+NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
+NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
+NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 graph_retrieval_query = """WITH node AS product, score 
 MATCH (product)<-[:ORDER_CONTAINS]-(o:Order)<-[:ORDERED]-(c:Customer)
@@ -58,13 +61,17 @@ top_k = 5
 vector_index_name = 'product_text_embeddings'
 
 vector_only_rag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions,
     k=top_k)
 
 graphrag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions,
     graph_retrieval_query=graph_retrieval_query,
     k=top_k)
 

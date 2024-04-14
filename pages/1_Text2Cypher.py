@@ -6,8 +6,11 @@ from ui_utils import render_header_svg
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 
 render_header_svg("images/graphrag.svg", 200)
-
 render_header_svg("images/bottom-header.svg", 200)
+
+NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
+NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
+NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 prompt_instructions_with_schema = '''#Context 
 
@@ -41,13 +44,19 @@ prompt_instructions_vector_only = """You are a product and retail expert who can
 
 top_k_vector_only = 5
 vector_index_name = 'product_text_embeddings'
+
 vector_only_rag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions_vector_only,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions_vector_only,
     k=top_k_vector_only)
 
-graphrag_t2c_chain = GraphRAGText2CypherChain(prompt_instructions_with_schema,
-                                              properties_to_remove_from_cypher_res=['textEmbedding'])
+graphrag_t2c_chain = GraphRAGText2CypherChain(
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    prompt_instructions=prompt_instructions_with_schema,
+    properties_to_remove_from_cypher_res=['textEmbedding'])
 
 prompt = st.text_input("submit a prompt:", value="")
 col1, col2 = st.columns(2)

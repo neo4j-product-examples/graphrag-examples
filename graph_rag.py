@@ -1,6 +1,6 @@
 import json
 from collections import OrderedDict
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from langchain.prompts.prompt import PromptTemplate
 from langchain_community.graphs.neo4j_graph import Neo4jGraph
@@ -12,9 +12,9 @@ import streamlit as st
 
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
-NEO4J_URI = st.secrets['NEO4J_URI']
-NEO4J_USERNAME = st.secrets['NEO4J_USERNAME']
-NEO4J_PASSWORD = st.secrets['NEO4J_PASSWORD']
+NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
+NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
+NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
 llm = ChatOpenAI(temperature=0, model_name='gpt-4', streaming=True)
@@ -84,12 +84,17 @@ def remove_key_from_dict(x, keys_to_remove):
 
 
 class GraphRAGChain:
-    def __init__(self, vector_index_name: str, prompt_instructions: str, graph_retrieval_query: str = None, k: int = 5):
+    def __init__(self, neo4j_uri: str,
+                 neo4j_auth: Tuple[str, str],
+                 vector_index_name: str,
+                 prompt_instructions: str,
+                 graph_retrieval_query: str = None,
+                 k: int = 5):
         self.store = Neo4jVector.from_existing_index(
             embedding=embedding_model,
-            url=NEO4J_URI,
-            username=NEO4J_USERNAME,
-            password=NEO4J_PASSWORD,
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
             index_name=vector_index_name,
             retrieval_query=graph_retrieval_query)
 
@@ -146,11 +151,14 @@ YIELD node, score
 
 
 class GraphRAGText2CypherChain:
-    def __init__(self, prompt_instructions: str, properties_to_remove_from_cypher_res: List = None):
+    def __init__(self, neo4j_uri: str,
+                 neo4j_auth: Tuple[str, str],
+                 prompt_instructions: str,
+                 properties_to_remove_from_cypher_res: List = None):
         self.store = Neo4jGraph(
-            url=NEO4J_URI,
-            username=NEO4J_USERNAME,
-            password=NEO4J_PASSWORD,
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
         )
         self.t2c_prompt = PromptTemplate.from_template(prompt_instructions + T2C_PROMPT_TEMPLATE)
         self.prompt = PromptTemplate.from_template(T2C_RESPONSE_PROMPT_TEMPLATE)
@@ -161,7 +169,6 @@ class GraphRAGText2CypherChain:
                       | self.prompt
                       | llm
                       | StrOutputParser())
-        #self.chain = self.t2c_prompt | llm | StrOutputParser() | self._format_and_save_query | self.store.query | self._format_and_save_context
         self.last_used_context = None
         self.last_retrieval_query = None
         self.properties_to_remove_from_cypher_res = properties_to_remove_from_cypher_res
