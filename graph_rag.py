@@ -1,5 +1,6 @@
 import json
 from collections import OrderedDict
+from operator import itemgetter
 from typing import Dict, List, Tuple
 
 from langchain.prompts.prompt import PromptTemplate
@@ -7,14 +8,9 @@ from langchain_community.graphs.neo4j_graph import Neo4jGraph
 from langchain_community.vectorstores.neo4j_vector import Neo4jVector
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
-import streamlit as st
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-
-NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
-NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
-NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
 llm = ChatOpenAI(temperature=0, model_name='gpt-4', streaming=True)
@@ -67,6 +63,17 @@ def format_doc(doc: Document) -> Dict:
     res = OrderedDict()
     res['text'] = doc.page_content
     res.update(doc.metadata)
+    return res
+
+
+def format_res_dicts(d: Dict) -> Dict:
+    res = OrderedDict()
+    for k, v in d.items():
+        if k != "metadata":
+            res[k] = v
+    for k, v in d['metadata'].items():
+        if v is not None:
+            res[k] = v
     return res
 
 
@@ -193,8 +200,8 @@ class GraphRAGPreFilterChain:
     def __init__(self, neo4j_uri: str,
                  neo4j_auth: Tuple[str, str],
                  vector_index_name: str,
-                 prompt_instructions: str,
-                 graph_prefilter_query: str = 'MATCH(n) WITH n as node, {} AS prefilterMetadata',
+                 prompt_instructions: str = '',
+                 graph_prefilter_query: str = 'MATCH(node) WITH node, {} AS prefilterMetadata',
                  k: int = 5):
         self.vectorStore = Neo4jVector.from_existing_index(
             embedding=embedding_model,
@@ -211,19 +218,26 @@ class GraphRAGPreFilterChain:
 
         self.embedding_model = embedding_model
 
-        # TODO: Capture prefilter metadata
-        vector_search_template = (
-            f"WITH node, prefilterMetadata, vector.similarity.cosine($queryVector, {self.store.text_node_property}) AS score"
-            f"RETURN node.`{self.vectorStore.text_node_property}` AS text, score, "
-            f"node {{.*, `{self.vectorStore.text_node_property}`: Null, "
-            f"`{self.vectorStore.embedding_node_property}`: Null, id: Null, }} AS metadata"
-            f"ORDER by score DESC limit $k"
-        )
-        self.retrieval_query_template = graph_prefilter_query + '\n' + vector_search_template
+        self.vector_search_template = f"""
+WITH node, prefilterMetadata, vector.similarity.cosine($queryVector, node.`{self.vectorStore.embedding_node_property}`) AS score
+WHERE score IS NOT NULL
+WITH node.`{self.vectorStore.text_node_property}` AS text, 
+    score, 
+    node {{.*, `{self.vectorStore.text_node_property}`: Null, `{self.vectorStore.embedding_node_property}`: Null, id: Null}} AS searchMetadata,
+    prefilterMetadata
+RETURN text, score, apoc.map.merge(searchMetadata, prefilterMetadata) AS metadata
+ORDER by score DESC limit $k
+            """
+
+        self.retrieval_query_template = graph_prefilter_query + '\n' + self.vector_search_template
 
         self.prompt = PromptTemplate.from_template(prompt_instructions + PROMPT_CONTEXT_TEMPLATE)
 
-        self.chain = ({'context': self.retriever | self._format_and_save_context, 'input': RunnablePassthrough()}
+        self.chain = ({
+                          'context': (lambda x: x['retrieverInput']) | RunnableLambda(
+                              self.retriever) | self._format_and_save_context,
+                          'input': (lambda x: x['prompt'])
+                      }
                       | self.prompt
                       | llm
                       | StrOutputParser())
@@ -233,7 +247,7 @@ class GraphRAGPreFilterChain:
         self.k = k
 
     def _format_and_save_context(self, docs) -> str:
-        res = json.dumps(docs, indent=1)
+        res = json.dumps([format_res_dicts(doc) for doc in docs], indent=1)
         self.last_used_context = res
         return res
 
@@ -242,12 +256,24 @@ class GraphRAGPreFilterChain:
         print(s)
         return s
 
-    def retriever(self, search_prompt: str):
-        query_vector = self.embedding_model.embed_query(search_prompt)
-        res = self.store.query(self.retrieval_query_template, params={'queryVector': query_vector, 'k': self.k})
+    def retriever(self, x):
+        print('================')
+        print('================')
+        print(self.retrieval_query_template)
+        print('================')
+        print('================')
+        query_vector = self.embedding_model.embed_query(x['searchPrompt'])
+        res = self.store.query(self.retrieval_query_template,
+                               params={**{'queryVector': query_vector, 'k': self.k}, **x['queryParams']})
         # TODO: format for specific example
         self._format_and_save_query(self.retrieval_query_template)
         return res
 
-    def invoke(self, prompt: str):
-        return self.chain.invoke(prompt)
+    def invoke(self, prompt: str, retrieval_search_text: str = None, query_params: Dict = None):
+        if retrieval_search_text is None:
+            retrieval_search_text = prompt
+        if query_params is None:
+            query_params = dict()
+        return self.chain.invoke(
+            {'retrieverInput': {'searchPrompt': retrieval_search_text, 'queryParams': query_params},
+             'prompt': prompt})
