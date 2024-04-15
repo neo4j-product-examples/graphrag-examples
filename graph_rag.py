@@ -15,6 +15,10 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
 llm = ChatOpenAI(temperature=0, model_name='gpt-4', streaming=True)
 
+VECTOR_QUERY_HEAD = """CALL db.index.vector.queryNodes($index, $k, $embedding)
+YIELD node, score
+"""
+
 PROMPT_CONTEXT_TEMPLATE = """
 
 # Question
@@ -189,7 +193,6 @@ class GraphRAGText2CypherChain:
 
     def _format_and_save_query(self, s) -> str:
         self.last_retrieval_query = s
-        print(s)
         return s
 
     def invoke(self, prompt: str):
@@ -253,15 +256,9 @@ ORDER by score DESC limit $k
 
     def _format_and_save_query(self, s) -> str:
         self.last_retrieval_query = s
-        print(s)
         return s
 
     def retriever(self, x):
-        print('================')
-        print('================')
-        print(self.retrieval_query_template)
-        print('================')
-        print('================')
         query_vector = self.embedding_model.embed_query(x['searchPrompt'])
         res = self.store.query(self.retrieval_query_template,
                                params={**{'queryVector': query_vector, 'k': self.k}, **x['queryParams']})
@@ -277,3 +274,80 @@ ORDER by score DESC limit $k
         return self.chain.invoke(
             {'retrieverInput': {'searchPrompt': retrieval_search_text, 'queryParams': query_params},
              'prompt': prompt})
+
+
+class DynamicGraphRAGChain:
+    def __init__(self, neo4j_uri: str,
+                 neo4j_auth: Tuple[str, str],
+                 vector_index_name: str,
+                 prompt_instructions: str = '',
+                 graph_retrieval_query: str = None,
+                 k: int = 5):
+        self.vectorStore = Neo4jVector.from_existing_index(
+            embedding=embedding_model,
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
+            index_name=vector_index_name,
+            retrieval_query=graph_retrieval_query)
+
+        self.store = Neo4jGraph(
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
+        )
+
+        self.embedding_model = embedding_model
+
+        self.prompt = PromptTemplate.from_template(prompt_instructions + PROMPT_CONTEXT_TEMPLATE)
+
+        self.chain = ({
+                          'context': (lambda x: x['retrieverInput']) | RunnableLambda(
+                              self.retriever) | self._format_and_save_context,
+                          'input': (lambda x: x['prompt'])
+                      }
+                      | self.prompt
+                      | llm
+                      | StrOutputParser())
+
+        self.last_used_context = None
+
+        self.k = k
+
+        default_retrieval = (
+            f"RETURN node.`{self.vectorStore.text_node_property}` AS text, score, "
+            f"node {{.*, `{self.vectorStore.text_node_property}`: Null, "
+            f"`{self.vectorStore.embedding_node_property}`: Null, id: Null }} AS metadata"
+        )
+        self.retrieval_query = (
+            self.vectorStore.retrieval_query if self.vectorStore.retrieval_query else default_retrieval
+        )
+
+        self.full_retrieval_query_template = VECTOR_QUERY_HEAD + self.retrieval_query
+
+    def _format_and_save_context(self, docs) -> str:
+        res = json.dumps([format_res_dicts(doc) for doc in docs], indent=1)
+        self.last_used_context = res
+        return res
+
+    def _format_and_save_query(self, s) -> str:
+        self.last_retrieval_query = s
+        return s
+
+    def retriever(self, x):
+        query_vector = self.embedding_model.embed_query(x['searchPrompt'])
+        res = self.store.query(self.full_retrieval_query_template,
+                               params={**{'index': self.vectorStore.index_name, 'embedding': query_vector, 'k': self.k},
+                                       **x['queryParams']})
+        self._format_and_save_query(self.full_retrieval_query_template)
+        return res
+
+    def invoke(self, prompt: str, retrieval_search_text: str = None, query_params: Dict = None):
+        if retrieval_search_text is None:
+            retrieval_search_text = prompt
+        if query_params is None:
+            query_params = dict()
+        return self.chain.invoke({
+            'retrieverInput': {'searchPrompt': retrieval_search_text, 'queryParams': query_params},
+            'prompt': prompt
+        })
