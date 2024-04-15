@@ -187,3 +187,67 @@ class GraphRAGText2CypherChain:
 
     def invoke(self, prompt: str):
         return self.chain.invoke(prompt)
+
+
+class GraphRAGPreFilterChain:
+    def __init__(self, neo4j_uri: str,
+                 neo4j_auth: Tuple[str, str],
+                 vector_index_name: str,
+                 prompt_instructions: str,
+                 graph_prefilter_query: str = 'MATCH(n) WITH n as node, {} AS prefilterMetadata',
+                 k: int = 5):
+        self.vectorStore = Neo4jVector.from_existing_index(
+            embedding=embedding_model,
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
+            index_name=vector_index_name)
+
+        self.store = Neo4jGraph(
+            url=neo4j_uri,
+            username=neo4j_auth[0],
+            password=neo4j_auth[1],
+        )
+
+        self.embedding_model = embedding_model
+
+        # TODO: Capture prefilter metadata
+        vector_search_template = (
+            f"WITH node, prefilterMetadata, vector.similarity.cosine($queryVector, {self.store.text_node_property}) AS score"
+            f"RETURN node.`{self.vectorStore.text_node_property}` AS text, score, "
+            f"node {{.*, `{self.vectorStore.text_node_property}`: Null, "
+            f"`{self.vectorStore.embedding_node_property}`: Null, id: Null, }} AS metadata"
+            f"ORDER by score DESC limit $k"
+        )
+        self.retrieval_query_template = graph_prefilter_query + '\n' + vector_search_template
+
+        self.prompt = PromptTemplate.from_template(prompt_instructions + PROMPT_CONTEXT_TEMPLATE)
+
+        self.chain = ({'context': self.retriever | self._format_and_save_context, 'input': RunnablePassthrough()}
+                      | self.prompt
+                      | llm
+                      | StrOutputParser())
+
+        self.last_used_context = None
+        self.last_retrieval_query = None
+        self.k = k
+
+    def _format_and_save_context(self, docs) -> str:
+        res = json.dumps(docs, indent=1)
+        self.last_used_context = res
+        return res
+
+    def _format_and_save_query(self, s) -> str:
+        self.last_retrieval_query = s
+        print(s)
+        return s
+
+    def retriever(self, search_prompt: str):
+        query_vector = self.embedding_model.embed_query(search_prompt)
+        res = self.store.query(self.retrieval_query_template, params={'queryVector': query_vector, 'k': self.k})
+        # TODO: format for specific example
+        self._format_and_save_query(self.retrieval_query_template)
+        return res
+
+    def invoke(self, prompt: str):
+        return self.chain.invoke(prompt)
