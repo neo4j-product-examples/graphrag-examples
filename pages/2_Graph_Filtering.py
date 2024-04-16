@@ -1,7 +1,7 @@
 import streamlit as st
 
 from graphrag import GraphRAGPreFilterChain, DynamicGraphRAGChain
-from ui_utils import render_header_svg
+from ui_utils import render_header_svg, get_neo4j_url_from_uri
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 
@@ -22,16 +22,15 @@ WITH count(recArticle) AS recommendationScore, product
 ORDER BY recommendationScore DESC LIMIT 100
 WITH product AS node, {recommendationScore:recommendationScore} AS prefilterMetadata"""
 
-postfilter_graph_retrieval_query = """
-    WITH node AS product, score AS searchScore
-    OPTIONAL MATCH(product)<-[:VARIANT_OF]-(:Article)<-[:PURCHASED]-(:Customer)
-    -[:PURCHASED]->(a:Article)<-[:PURCHASED]-(:Customer {customerId: $customerId})
+postfilter_graph_retrieval_query = """WITH node AS product, score AS searchScore
+OPTIONAL MATCH(product)<-[:VARIANT_OF]-(:Article)<-[:PURCHASED]-(:Customer)
+-[:PURCHASED]->(a:Article)<-[:PURCHASED]-(:Customer {customerId: $customerId})
 
-    WITH count(a) AS purchaseScore, product.text AS text, searchScore, product.productCode AS productCode
-    RETURN text,
-        (1+purchaseScore)*searchScore AS score,
-        {productCode: productCode, purchaseScore:purchaseScore, searchScore:searchScore} AS metadata
-    ORDER BY purchaseScore DESC, searchScore DESC LIMIT 20"""
+WITH count(a) AS purchaseScore, product.text AS text, searchScore, product.productCode AS productCode
+RETURN text,
+    (1+purchaseScore)*searchScore AS score,
+    {productCode: productCode, purchaseScore:purchaseScore, searchScore:searchScore} AS metadata
+ORDER BY purchaseScore DESC, searchScore DESC LIMIT 20"""
 
 graphrag_prefilter_chain = GraphRAGPreFilterChain(neo4j_uri=HM_NEO4J_URI,
                                                   neo4j_auth=(HM_NEO4J_USERNAME, HM_NEO4J_PASSWORD),
@@ -42,7 +41,7 @@ graphrag_prefilter_chain = GraphRAGPreFilterChain(neo4j_uri=HM_NEO4J_URI,
 graphrag_postfilter_chain = DynamicGraphRAGChain(neo4j_uri=HM_NEO4J_URI,
                                                  neo4j_auth=(HM_NEO4J_USERNAME, HM_NEO4J_PASSWORD),
                                                  vector_index_name='product_text_embeddings',
-                                                 graph_retrieval_query = postfilter_graph_retrieval_query,
+                                                 graph_retrieval_query=postfilter_graph_retrieval_query,
                                                  k=100)
 
 
@@ -116,15 +115,14 @@ with col1:
                 st.json(graphrag_postfilter_chain.last_used_context)
 
             with st.expander("__Query used to retrieve context:__"):
-                graph_rag_query = graphrag_postfilter_chain.last_retrieval_query
-                st.markdown(f"""
-                """)
-                st.code(graph_rag_query, language='cypher')
+                graphrag_post_filter_queries = graphrag_postfilter_chain.get_last_browser_queries()
+                st.code(graphrag_post_filter_queries['params_query'], language='cypher')
+                st.code(graphrag_post_filter_queries['query_body'], language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) and enter your credentials\n' +
                             '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(HM_NEO4J_URI))
 
             st.success('Done!')
 
@@ -142,14 +140,13 @@ with col2:
                 st.json(graphrag_prefilter_chain.last_used_context)
 
             with st.expander("__Query used to retrieve context:__"):
-                graph_rag_query = graphrag_prefilter_chain.last_retrieval_query
-                st.markdown(f"""
-                """)
-                st.code(graph_rag_query, language='cypher')
+                graphrag_prefilter_queries = graphrag_prefilter_chain.get_last_browser_queries()
+                st.code(graphrag_prefilter_queries['params_query'], language='cypher')
+                st.code(graphrag_prefilter_queries['query_body'], language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) and enter your credentials\n' +
                             '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(HM_NEO4J_URI))
 
             st.success('Done!')
