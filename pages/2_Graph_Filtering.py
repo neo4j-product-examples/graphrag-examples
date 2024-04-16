@@ -1,6 +1,6 @@
 import streamlit as st
 
-from graph_rag import GraphRAGPreFilterChain, DynamicGraphRAGChain
+from graphrag import GraphRAGPreFilterChain, DynamicGraphRAGChain
 from ui_utils import render_header_svg
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
