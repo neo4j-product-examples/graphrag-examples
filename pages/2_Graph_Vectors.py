@@ -54,6 +54,7 @@ def generate_prompt(cstmr_name_input, time_of_year_input, cstmr_interests_input)
     recent purchases and searches given: 
     - the current season / time of year: {time_of_year_input} 
     - Recent purchases / searches: {cstmr_interests_input}
+    
     Please only mention the products listed in the context below. Do not come up with or add any new products to the list.
     The below candidates are recommended based on the purchase patterns of other customers in the HRM database.
     Select the best 4 to 5 product subset from the context that best match the time of year: {time_of_year_input} and to pair with recent purchases.
@@ -92,8 +93,11 @@ with st.form('input_form'):
     time_of_year = st.text_input("time of year:", value=preset_example[2], key='time_of_year_input')
     gen_content = st.form_submit_button('Generate Content')
 
-col1, col2 = st.columns(2)
+if gen_content:
+    st.markdown('### Initial Prompt: ')
+    st.markdown(generate_prompt(customer_name, time_of_year, customer_interests))
 
+col1, col2 = st.columns(2)
 with col1:
     st.subheader("Vector Only")
     if gen_content:
