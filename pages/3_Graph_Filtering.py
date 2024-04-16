@@ -110,6 +110,10 @@ with st.form('input_form'):
 
     gen_content = st.form_submit_button('Generate Content')
 
+if gen_content:
+    st.markdown('### Initial Prompt: ')
+    st.markdown(generate_prompt(customer_name, time_of_year))
+
 col1, col2 = st.columns(2)
 
 with col1:
