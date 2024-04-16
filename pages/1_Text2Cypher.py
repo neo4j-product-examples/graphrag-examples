@@ -1,6 +1,6 @@
 import streamlit as st
 
-from graph_rag import GraphRAGChain, GraphRAGText2CypherChain
+from graphrag import GraphRAGChain, GraphRAGText2CypherChain
 from ui_utils import render_header_svg
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
