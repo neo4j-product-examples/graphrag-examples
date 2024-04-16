@@ -1,4 +1,6 @@
 import base64
+from typing import Dict
+
 import streamlit as st
 
 
@@ -13,3 +15,9 @@ def render_header_svg(file_path: str, px: int = 200):
     with open(file_path) as f:
         svg = f.read()
     render_centered_svg_from_str(svg, px)
+
+
+def get_neo4j_url_from_uri(uri):
+    if uri[5] == '+':
+        return 'http' + uri[6:]
+    return 'http' + uri[5:]

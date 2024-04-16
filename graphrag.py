@@ -222,14 +222,14 @@ class GraphRAGPreFilterChain:
         self.embedding_model = embedding_model
 
         self.vector_search_template = f"""
-WITH node, prefilterMetadata, vector.similarity.cosine($queryVector, node.`{self.vectorStore.embedding_node_property}`) AS score
+WITH node, prefilterMetadata, vector.similarity.cosine($embedding, node.`{self.vectorStore.embedding_node_property}`) AS score
 WHERE score IS NOT NULL
 WITH node.`{self.vectorStore.text_node_property}` AS text, 
     score, 
     node {{.*, `{self.vectorStore.text_node_property}`: Null, `{self.vectorStore.embedding_node_property}`: Null, id: Null}} AS searchMetadata,
     prefilterMetadata
 RETURN text, score, apoc.map.merge(searchMetadata, prefilterMetadata) AS metadata
-ORDER by score DESC limit $k
+ORDER by score DESC LIMIT toInteger($k)
             """
 
         self.retrieval_query_template = graph_prefilter_query + '\n' + self.vector_search_template
@@ -247,6 +247,7 @@ ORDER by score DESC limit $k
 
         self.last_used_context = None
         self.last_retrieval_query = None
+        self.last_retrieval_query_params = None
         self.k = k
 
     def _format_and_save_context(self, docs) -> str:
@@ -254,16 +255,22 @@ ORDER by score DESC limit $k
         self.last_used_context = res
         return res
 
-    def _format_and_save_query(self, s) -> str:
-        self.last_retrieval_query = s
-        return s
+    def _format_and_save_query(self, template: str, params: Dict):
+        self.last_retrieval_query = template
+        self.last_retrieval_query_params = params
+
+    def get_last_browser_queries(self):
+        params_string = json.dumps(self.last_retrieval_query_params)
+        params_query = f":params {params_string}"
+        return {'params_query': params_query,
+                'params_url_query': f'/browser?cmd=params&arg={params_string}',
+                'query_body': self.last_retrieval_query}
 
     def retriever(self, x):
         query_vector = self.embedding_model.embed_query(x['searchPrompt'])
-        res = self.store.query(self.retrieval_query_template,
-                               params={**{'queryVector': query_vector, 'k': self.k}, **x['queryParams']})
-        # TODO: format for specific example
-        self._format_and_save_query(self.retrieval_query_template)
+        params = {**x['queryParams'], **{'index': self.vectorStore.index_name, 'k': self.k, 'embedding': query_vector}}
+        res = self.store.query(self.retrieval_query_template, params=params)
+        self._format_and_save_query(self.retrieval_query_template, params)
         return res
 
     def invoke(self, prompt: str, retrieval_search_text: str = None, query_params: Dict = None):
@@ -310,8 +317,6 @@ class DynamicGraphRAGChain:
                       | llm
                       | StrOutputParser())
 
-        self.last_used_context = None
-
         self.k = k
 
         default_retrieval = (
@@ -324,22 +329,31 @@ class DynamicGraphRAGChain:
         )
 
         self.full_retrieval_query_template = VECTOR_QUERY_HEAD + self.retrieval_query
+        self.last_used_context = None
+        self.last_retrieval_query = None
+        self.last_retrieval_query_params = None
 
     def _format_and_save_context(self, docs) -> str:
         res = json.dumps([format_res_dicts(doc) for doc in docs], indent=1)
         self.last_used_context = res
         return res
 
-    def _format_and_save_query(self, s) -> str:
-        self.last_retrieval_query = s
-        return s
+    def _format_and_save_query(self, template: str, params: Dict):
+        self.last_retrieval_query = template
+        self.last_retrieval_query_params = params
+
+    def get_last_browser_queries(self):
+        params_string = json.dumps(self.last_retrieval_query_params)
+        params_query = f":params {params_string}"
+        return {'params_query': params_query,
+                'params_url_query': f'/browser?cmd=params&arg={params_string}',
+                'query_body': self.last_retrieval_query}
 
     def retriever(self, x):
         query_vector = self.embedding_model.embed_query(x['searchPrompt'])
-        res = self.store.query(self.full_retrieval_query_template,
-                               params={**{'index': self.vectorStore.index_name, 'embedding': query_vector, 'k': self.k},
-                                       **x['queryParams']})
-        self._format_and_save_query(self.full_retrieval_query_template)
+        params = {**x['queryParams'], **{'index': self.vectorStore.index_name, 'k': self.k, 'embedding': query_vector}}
+        res = self.store.query(self.full_retrieval_query_template, params=params)
+        self._format_and_save_query(self.full_retrieval_query_template, params)
         return res
 
     def invoke(self, prompt: str, retrieval_search_text: str = None, query_params: Dict = None):
