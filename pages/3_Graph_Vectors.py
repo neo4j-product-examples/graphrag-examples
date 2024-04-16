@@ -18,6 +18,7 @@ graph_retrieval_query = """WITH node AS searchProduct, score AS searchScore
 MATCH(searchProduct)<-[:VARIANT_OF]-(searchArticle:Article)
 WHERE  searchArticle.graphEmbedding IS NOT NULL
 CALL db.index.vector.queryNodes('article_graph_embeddings', 10, searchArticle.graphEmbedding) YIELD node, score
+WHERE score < 1.0
 MATCH (node)-[:VARIANT_OF]->(product)
 RETURN product.`text` AS text, 
     max(score) AS score, 
@@ -39,13 +40,13 @@ vector_only_chain = DynamicGraphRAGChain(neo4j_uri=HM_NEO4J_URI,
 def generate_prompt(cstmr_name_input, time_of_year_input, cstmr_interests_input):
     return f'''
     You are a personal assistant named Sally for a fashion, home, and beauty company called HRM.
-    write an email to {cstmr_name_input}, one of your customers, to recommend and summarize products to go with their 
+    write an email to {cstmr_name_input}, one of your customers, to recommend and summarize products that pair well with their 
     recent purchases and searches given: 
     - the current season / time of year: {time_of_year_input} 
     - Recent purchases / searches: {cstmr_interests_input}
     Please only mention the products listed in the context below. Do not come up with or add any new products to the list.
     The below candidates are recommended based on the purchase patterns of other customers in the HRM database.
-    Select the best 4 to 5 product subset from the context that best match the time of year: {time_of_year_input}.
+    Select the best 4 to 5 product subset from the context that best match the time of year: {time_of_year_input} and to pair with recent purchases.
     Each product comes with an https `url` field. Make sure to provide that https url with descriptive name text in markdown for each product.
     '''
 
