@@ -11,4 +11,4 @@ render_header_svg("images/bottom-header.svg", 200)
 
 st.header('Sample Application Stack:')
 
-st.image('images/stack.png', width=400)
+st.image('images/stack.png', width=600)

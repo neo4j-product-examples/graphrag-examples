@@ -3,14 +3,24 @@ import streamlit as st
 from graphrag import DynamicGraphRAGChain
 from ui_utils import render_header_svg, get_neo4j_url_from_uri
 
-st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
-
-render_header_svg("images/graphrag.svg", 200)
-render_header_svg("images/bottom-header.svg", 200)
-
 HM_NEO4J_URI = st.secrets['HM_NEO4J_URI']
 HM_NEO4J_USERNAME = st.secrets['HM_NEO4J_USERNAME']
 HM_NEO4J_PASSWORD = st.secrets['HM_NEO4J_PASSWORD']
+
+st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
+render_header_svg("images/graphrag.svg", 200)
+render_header_svg("images/bottom-header.svg", 200)
+st.markdown(' ')
+with st.expander('Dataset Info:'):
+    st.markdown('''#### [H&M Fashion Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data), a sample of a real retail dataset including customer purchase data and rich information around products such as names, types, descriptions, department sections, etc.
+    ''')
+    st.image('images/hm-data-model.png', width=800)
+    st.markdown(f'''use the following queries in [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) to explore the data:''')
+    st.code('CALL db.schema.visualization()', language='cypher')
+    st.code('''MATCH (p:Product)<-[v:VARIANT_OF]-(a:Article)<-[t:PURCHASED]-(c:Customer)
+    RETURN * LIMIT 150''', language='cypher')
+st.markdown('''### Task: Generate email content for product recommendations based of customer recent interests, purchases, and time of year.''')
+
 
 vector_index_name = 'product_text_embeddings'
 

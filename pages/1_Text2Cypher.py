@@ -1,16 +1,24 @@
 import streamlit as st
 
 from graphrag import GraphRAGChain, GraphRAGText2CypherChain
-from ui_utils import render_header_svg
-
-st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
-
-render_header_svg("images/graphrag.svg", 200)
-render_header_svg("images/bottom-header.svg", 200)
+from ui_utils import render_header_svg, get_neo4j_url_from_uri
 
 NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
 NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
 NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
+
+st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
+render_header_svg("images/graphrag.svg", 200)
+render_header_svg("images/bottom-header.svg", 200)
+st.markdown(' ')
+with st.expander('Dataset Info:'):
+    st.markdown('''#### [H&M Fashion Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data), a sample of a real retail dataset including customer purchase data and rich information around products such as names, types, descriptions, department sections, etc.
+    ''')
+    st.image('images/northwind-data-model.png', width=800)
+    st.markdown(
+        f'''use the following queries in [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) to explore the data:''')
+    st.code('CALL db.schema.visualization()', language='cypher')
+    st.code('''MATCH p=()-[]->()-[]->() RETURN p LIMIT 300''', language='cypher')
 
 prompt_instructions_with_schema = '''#Context 
 
