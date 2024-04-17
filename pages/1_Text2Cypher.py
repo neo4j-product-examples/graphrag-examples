@@ -15,12 +15,11 @@ You have expertise in neo4j cypher query language and based on below graph data 
 
 Node Labels and Properties
 
-["Customer"], ["country:String", "address:String", "contactTitle:String", "phone:String", "city:String", "Bloom_Link:String", "contactName:String", "postalCode:String", "companyName:String", "customerID:String", "region:String", "fax:String"]
+["Customer"], ["country:String", "address:String", "contactTitle:String", "phone:String", "city:String", "contactName:String", "postalCode:String", "companyName:String", "customerID:String", "region:String", "fax:String"]
 ["Supplier"], ["country:String", "address:String", "contactTitle:String", "supplierID:String", "phone:String", "city:String", "contactName:String", "postalCode:String", "companyName:String", "fax:String", "region:String", "homePage:String"]
-["Order"], ["shipCity:String", "orderID:String", "freight:String", "requiredDate:String", "employeeID:String", "shipPostalCode:String", "shipName:String", "shipCountry:String", "shipAddress:String", "shipVia:String", "customerID:String", "shipRegion:String", "shippedDate:String", "orderDate:String"]
+["Order"], ["orderID:String", "freight:String", "requiredDate:String", "employeeID:String", "shipVia:String", "customerID:String", "orderDate:String", "shippedDate:String"]
 ["Category"], ["description:String", "categoryName:String", "picture:String", "categoryID:String"]
-["Product"], ["reorderLevel:String", "unitsInStock:String", "unitPrice:String", "supplierID:String", "productID:String", "discontinued:String", "quantityPerUnit:String", "unitsOnOrder:String", "productName:String", "categoryID:String"]
-["Order_Detail"], ["unitPrice:String", "discount:String", "quantity:String", "productID:String", "orderID:String"]
+["Product"], ["reorderLevel:Integer", "unitsInStock:Integer", "unitPrice:Float", "supplierID:String", "productID:String", "discontinued:String", "quantityPerUnit:String", "unitsOnOrder:Integer", "productName:String", "categoryID:String"]
 ["Address"], ["addressID", "name", "address", "city", "region", "postalCode", "country"]
 
 Accepted graph traversal paths
@@ -138,7 +137,7 @@ st.markdown("""
     <td></td>
   </tr>
   <tr>
-    <td>Who is the top customer in USA with highest number of orders with Beverages product category? Return the Bloom link for that customer</td>
+    <td>Who is the top customer in USA with highest number of orders with the Beverages product category?</td>
     <td>A customer is purchasing "Sir Rodney's Marmalade". What top 4 products can we recommend based on past customer transactions?</td>
   </tr>
   <tr>
