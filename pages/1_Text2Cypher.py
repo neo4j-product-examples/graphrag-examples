@@ -1,13 +1,24 @@
 import streamlit as st
 
-from graph_rag import GraphRAGChain, GraphRAGText2CypherChain
-from ui_utils import render_header_svg
+from graphrag import GraphRAGChain, GraphRAGText2CypherChain
+from ui_utils import render_header_svg, get_neo4j_url_from_uri
+
+NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
+NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
+NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
-
 render_header_svg("images/graphrag.svg", 200)
-
 render_header_svg("images/bottom-header.svg", 200)
+st.markdown(' ')
+with st.expander('Dataset Info:'):
+    st.markdown('''####  Northwind: Sales data for Northwind Traders, a fictitious specialty foods export/import company.
+    ''')
+    st.image('images/northwind-data-model.png', width=800)
+    st.markdown(
+        f'''use the following queries in [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) to explore the data:''')
+    st.code('CALL db.schema.visualization()', language='cypher')
+    st.code('''MATCH p=()-[]->()-[]->() RETURN p LIMIT 300''', language='cypher')
 
 prompt_instructions_with_schema = '''#Context 
 
@@ -40,13 +51,19 @@ prompt_instructions_vector_only = """You are a product and retail expert who can
 
 top_k_vector_only = 5
 vector_index_name = 'product_text_embeddings'
+
 vector_only_rag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions_vector_only,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions_vector_only,
     k=top_k_vector_only)
 
-graphrag_t2c_chain = GraphRAGText2CypherChain(prompt_instructions_with_schema,
-                                              properties_to_remove_from_cypher_res=['textEmbedding'])
+graphrag_t2c_chain = GraphRAGText2CypherChain(
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    prompt_instructions=prompt_instructions_with_schema,
+    properties_to_remove_from_cypher_res=['textEmbedding'])
 
 prompt = st.text_input("submit a prompt:", value="")
 col1, col2 = st.columns(2)
@@ -67,9 +84,9 @@ with col1:
                 st.code(vector_rag_query, language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) and enter your credentials\n' +
+                            '* Run the above queries')
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI))
 
             st.success('Done!')
 
@@ -91,9 +108,9 @@ with col2:
                 st.code(graph_rag_query, language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) and enter your credentials\n' +
+                            '* Run the above queries')
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI))
 
             st.success('Done!')
 

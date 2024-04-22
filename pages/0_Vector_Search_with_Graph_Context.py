@@ -1,13 +1,25 @@
 import streamlit as st
 
-from graph_rag import GraphRAGChain
-from ui_utils import render_header_svg
+from graphrag import GraphRAGChain
+from ui_utils import render_header_svg, get_neo4j_url_from_uri
+
+NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
+NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
+NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
-
 render_header_svg("images/graphrag.svg", 200)
-
 render_header_svg("images/bottom-header.svg", 200)
+st.markdown(' ')
+with st.expander('Dataset Info:'):
+    st.markdown('''####  Northwind: Sales data for Northwind Traders, a fictitious specialty foods export/import company.
+    ''')
+    st.image('images/northwind-data-model.png', width=800)
+    st.markdown(
+        f'''use the following queries in [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) to explore the data:''')
+    st.code('CALL db.schema.visualization()', language='cypher')
+    st.code('''MATCH p=()-[]->()-[]->() RETURN p LIMIT 300''', language='cypher')
+
 
 graph_retrieval_query = """WITH node AS product, score 
 MATCH (product)<-[:ORDER_CONTAINS]-(o:Order)<-[:ORDERED]-(c:Customer)
@@ -58,13 +70,17 @@ top_k = 5
 vector_index_name = 'product_text_embeddings'
 
 vector_only_rag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions,
     k=top_k)
 
 graphrag_chain = GraphRAGChain(
-    vector_index_name,
-    prompt_instructions,
+    neo4j_uri=NORTHWIND_NEO4J_URI,
+    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    vector_index_name=vector_index_name,
+    prompt_instructions=prompt_instructions,
     graph_retrieval_query=graph_retrieval_query,
     k=top_k)
 
@@ -87,9 +103,9 @@ with col1:
                 st.code(vector_rag_query, language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) and enter your credentials\n' +
+                            '* Run the above queries')
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI))
 
             st.success('Done!')
 
@@ -106,15 +122,14 @@ with col2:
 
             with st.expander("__Query used to retrieve context:__"):
                 graph_rag_query = graphrag_chain.get_full_retrieval_query(prompt)
-                st.markdown(f"""
-                The following Cypher was used to achieve vector results with additional context from the graph.  The vector search will return the highest ranking `nodes` based on the vector similarity `score`(for this example we chose `{top_k}` nodes) . The below query then takes those nodes and scores and performs additional graph traversals and aggregation logic to obtain context.  In some ways you can think of this additional context as 'metadata' with the added benfitis of it being collected in real-time with the ability tp use very flecxible and robust patterns to do so. 
+                st.markdown(f"""The following Cypher query was used to obtain vector results enriched with additional context from the graph. The query initially performs a vector search, returning the highest ranking `nodes` based on their vector similarity `score`. In this example, we selected `{top_k}` nodes. Subsequently, the query performs further graph traversals and aggregation to gather context. You can think of this context as 'metadata,' but with the advantages of real-time collection and the flexibility to use robust patterns.
                 """)
                 st.code(graph_rag_query, language='cypher')
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
-                            '* Go to [Neo4j Workspace](https://workspace.neo4j.io/connection/connect) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
-                st.link_button("Try in Neo4j Workspace!", "https://workspace.neo4j.io/connection/connect")
+                            f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI)}) and enter your credentials\n' +
+                            '* Run the above queries')
+                st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(NORTHWIND_NEO4J_URI))
 
             st.success('Done!')
 

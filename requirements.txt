@@ -12,3 +12,6 @@ plotly
 tqdm
 altair<5
 streamlit_code_editor
+python-dotenv
+neo4j
+jupyter
