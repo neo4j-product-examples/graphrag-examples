@@ -13,13 +13,12 @@ render_header_svg("images/graphrag.svg", 200)
 render_header_svg("images/bottom-header.svg", 200)
 st.markdown(' ')
 with st.expander('Dataset Info:'):
-    st.markdown('''#### [H&M Fashion Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data), a sample of a real retail dataset including customer purchase data and rich information around products such as names, types, descriptions, department sections, etc.
+    st.markdown('''#### [H&M Fashion Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data): A sample of real-world retail data, including customer purchase data and rich information around products such as names, types, descriptions, department sections, etc.
     ''')
     st.image('images/hm-data-model.png', width=800)
     st.markdown(f'''use the following queries in [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) to explore the data:''')
     st.code('CALL db.schema.visualization()', language='cypher')
-    st.code('''MATCH (p:Product)<-[v:VARIANT_OF]-(a:Article)<-[t:PURCHASED]-(c:Customer)
-    RETURN * LIMIT 150''', language='cypher')
+    st.code('''MATCH (p:Product)<-[v:VARIANT_OF]-(a:Article)<-[t:PURCHASED]-(c:Customer) RETURN * LIMIT 150''', language='cypher')
 st.markdown('''### Task: Generate email content for personalized product recommendations based of customer interests, purchase history, and time of year.''')
 
 
@@ -136,7 +135,7 @@ with col1:
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
                             f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
+                            '* Run the above queries')
                 st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(HM_NEO4J_URI))
 
             st.success('Done!')
@@ -161,7 +160,7 @@ with col2:
                 st.markdown('### Visualize Retrieval in Neo4j')
                 st.markdown('To explore the results in Neo4j do the following:\n' +
                             f'* Go to [Neo4j Browser]({get_neo4j_url_from_uri(HM_NEO4J_URI)}) and enter your credentials\n' +
-                            '* In the Query panel run the above query')
+                            '* Run the above queries')
                 st.link_button("Try in Neo4j Browser!", get_neo4j_url_from_uri(HM_NEO4J_URI))
 
             st.success('Done!')
