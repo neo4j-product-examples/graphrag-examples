@@ -1,6 +1,6 @@
 import pandas
 import streamlit as st
-from retreivers import weighted_retrieval
+from retreivers import retrieval_with_tools
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 
@@ -9,7 +9,7 @@ text_search = st.text_input("Search for talent:", value="")
 
 n_cards_per_row = 3
 if text_search:
-    search_results = weighted_retrieval(prompt=text_search, weights=[0.1, 0.6, 0.3])
+    search_results = retrieval_with_tools(prompt=text_search)
     for k in range(len(search_results)):
         row = search_results[k]
         i = k % n_cards_per_row
