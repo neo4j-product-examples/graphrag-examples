@@ -14,14 +14,14 @@ This app uses two datasets:
 1. The classic __Northwind Database__: Sales data for Northwind Traders, a fictitious specialty foods export/import company.
 2. A sample of the __[H&M Fashion Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data)__: Real-world retail data, including customer purchases and rich information around products such as names, types, descriptions, department sections, etc.
 
-The app has four pages in total, each of which relay on one of these datasets:
+The app has 4 pages in total, reflecting 4 GraphRAG patterns. Each page relies on one of the above datasets:
 
-| App Page                         | Dataset Used        |
-|----------------------------------|---------------------|
-| Vector Search With Graph Context | Northwind           |
-| Text2Cypher                      | Northwind           |
-| Graph Vectors                    | H&M Fashion Dataset |
-| Graph Filtering                  | H&M Fashion Dataset |
+| Page / GraphRAG Pattern          | Dataset Used        | Pattern Description                                                                                                 |
+|----------------------------------|---------------------|---------------------------------------------------------------------------------------------------------------------|
+| Vector Search With Graph Context | Northwind           | Use graph traversals to retrieve items related to vector search results                                             |
+| Text2Cypher                      | Northwind           | Convert natural language prompts to explicit Cypher queries for retrieval                                           |
+| Graph Vectors                    | H&M Fashion Dataset | Use graph embeddings for retrieval, incorporating both structured and unstructured data in vector similarity search |
+| Graph Filtering                  | H&M Fashion Dataset | Use graph patterns and properties to pre/post filter vector search results (can also include Hybrid search          |
 
 
 For the entire app to work, each dataset must be loaded into its own Neo4j database. If you choose not to load one of the datasets, the associated pages will not function which may be acceptable if those pages are not of interest to you.
