@@ -1,5 +1,13 @@
+//IF YOU ARE USING OpenAI API:
 //set openai api key for text embedding - REPLACE WITH YOUR OWN
+:param provider => 'OpenAI';
 :param openAIKey => "<your OpenAI API Key>";
+
+//IF YOU ARE USING AzureOpenAI API:
+:param provider => 'AzureOpenAI';
+:param openAIKey => "<your Azure OpenAI API Key>";
+:param resource => "<your Azure OpenAI resource name">;
+:param deployment => "<your Azure OpenAI embedding model deployment name>"
 
 /////////////////////////////////////////////////////////
 // Load Northwind Data
@@ -74,11 +82,21 @@ details.quantity = toInteger(row.quantity);
 // Set Text Property and Vector Index
 /////////////////////////////////////////////////////////
 //create text and embedding vector properties
+// IF USING OpenAI
 MATCH(p:Product)-[:BELONGS_TO]-(c:Category)
 SET p.text = "Product Category: " + c.categoryName + ' - ' + c.description + "\nProduct Name: " + p.productName
 WITH p, genai.vector.encode(p.text, 'OpenAI', {token:$openAIKey}) AS textEmbedding
 CALL db.create.setNodeVectorProperty(p,'textEmbedding', textEmbedding)
 RETURN p.productID, p.text, p.textEmbedding;
+//
+
+// IF USING AzureOpenAI
+MATCH(p:Product)-[:BELONGS_TO]-(c:Category)
+SET p.text = "Product Category: " + c.categoryName + ' - ' + c.description + "\nProduct Name: " + p.productName
+WITH p, genai.vector.encode(p.text, token: $provider, {$openAIKey, resource: $resource, deployment: $deployment}) AS textEmbedding
+CALL db.create.setNodeVectorProperty(p,'textEmbedding', textEmbedding)
+RETURN p.productID, p.text, p.textEmbedding;
+//
 
 //create vector index
 CREATE VECTOR INDEX product_text_embeddings
