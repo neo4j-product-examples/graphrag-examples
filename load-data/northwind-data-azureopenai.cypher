@@ -1,6 +1,6 @@
 //THIS FILE IS FOR WHEN YOU ARE USING AZURE OPENAI ENDPOINT:
 
-// Provide the endpoint details
+// set azure openai api key for text embedding - REPLACE WITH YOUR OWN
 :param provider => 'AzureOpenAI';
 :param openAIKey => "<your Azure OpenAI API Key>";
 :param resource => "<your Azure OpenAI resource name">;
