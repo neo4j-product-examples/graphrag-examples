@@ -174,8 +174,8 @@ ranking_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = ChatOpenAI(temperature=0, model_name="gpt-4-0125-preview")
-chain = ranking_prompt | llm.with_structured_output(Ranking)
+#llm = ChatOpenAI(temperature=0, model_name="gpt-4-0125-preview")
+#chain = ranking_prompt | llm.with_structured_output(Ranking)
 
 
 def retrieval_with_tools(prompt: str, top_k: int = None):
