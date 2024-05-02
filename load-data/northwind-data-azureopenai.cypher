@@ -82,7 +82,7 @@ details.quantity = toInteger(row.quantity);
 
 MATCH(p:Product)-[:BELONGS_TO]-(c:Category)
 SET p.text = "Product Category: " + c.categoryName + ' - ' + c.description + "\nProduct Name: " + p.productName
-WITH p, genai.vector.encode(p.text, token: $provider, {$openAIKey, resource: $resource, deployment: $deployment}) AS textEmbedding
+WITH p, genai.vector.encode(p.text, $provider, {token: $openAIKey, resource: $resource, deployment: $deployment}) AS textEmbedding
 CALL db.create.setNodeVectorProperty(p,'textEmbedding', textEmbedding)
 RETURN p.productID, p.text, p.textEmbedding;
 
