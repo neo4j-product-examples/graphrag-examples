@@ -2,6 +2,7 @@ graphdatascience
 retry
 langchain
 langchain-openai
+langchain-community
 streamlit
 streamlit-chat
 streamlit-chat-media
