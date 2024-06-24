@@ -13,7 +13,8 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")
-llm = ChatOpenAI(temperature=0, model_name='gpt-4', streaming=True)
+llm = ChatOpenAI(temperature=0, model_name='gpt-4o', streaming=True)
+t2c_llm = ChatOpenAI(temperature=0, model_name='gpt-4', streaming=True)
 
 VECTOR_QUERY_HEAD = """CALL db.index.vector.queryNodes($index, $k, $embedding)
 YIELD node, score
@@ -174,7 +175,7 @@ class GraphRAGText2CypherChain:
         self.t2c_prompt = PromptTemplate.from_template(prompt_instructions + T2C_PROMPT_TEMPLATE)
         self.prompt = PromptTemplate.from_template(T2C_RESPONSE_PROMPT_TEMPLATE)
         self.chain = ({
-                          'context': self.t2c_prompt | llm | StrOutputParser() | self._format_and_save_query | self.store.query | self._format_and_save_context,
+                          'context': self.t2c_prompt | t2c_llm | StrOutputParser() | self._format_and_save_query | self.store.query | self._format_and_save_context,
                           'input': RunnablePassthrough()
                       }
                       | self.prompt
