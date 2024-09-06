@@ -1,7 +1,8 @@
 import json
 from collections import OrderedDict
+from dataclasses import dataclass
 from operator import itemgetter
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 from langchain.prompts.prompt import PromptTemplate
 from langchain_community.graphs.neo4j_graph import Neo4jGraph
@@ -95,18 +96,31 @@ def remove_key_from_dict(x, keys_to_remove):
     return x_clean
 
 
+@dataclass(frozen=True)
+class Neo4jCredentials:
+    uri: str
+    password: str
+    username: str = "neo4j"
+    database: str = "neo4j"
+
+
 class GraphRAGChain:
-    def __init__(self, neo4j_uri: str,
-                 neo4j_auth: Tuple[str, str],
+    def __init__(self,
                  vector_index_name: str,
                  prompt_instructions: str,
                  graph_retrieval_query: str = None,
-                 k: int = 5):
+                 k: int = 5,
+                 neo4j_uri: Optional[str] = None,
+                 neo4j_username: Optional[str] = None,
+                 neo4j_password: Optional[str] = None,
+                 neo4j_database: Optional[str] = None
+                 ):
         self.store = Neo4jVector.from_existing_index(
             embedding=embedding_model,
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database,
             index_name=vector_index_name,
             retrieval_query=graph_retrieval_query)
 
@@ -163,14 +177,19 @@ YIELD node, score
 
 
 class GraphRAGText2CypherChain:
-    def __init__(self, neo4j_uri: str,
-                 neo4j_auth: Tuple[str, str],
+    def __init__(self,
                  prompt_instructions: str,
-                 properties_to_remove_from_cypher_res: List = None):
+                 properties_to_remove_from_cypher_res: List = None,
+                 neo4j_uri: Optional[str] = None,
+                 neo4j_username: Optional[str] = None,
+                 neo4j_password: Optional[str] = None,
+                 neo4j_database: Optional[str] = None
+                 ):
         self.store = Neo4jGraph(
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database
         )
         self.t2c_prompt = PromptTemplate.from_template(prompt_instructions + T2C_PROMPT_TEMPLATE)
         self.prompt = PromptTemplate.from_template(T2C_RESPONSE_PROMPT_TEMPLATE)
@@ -201,23 +220,29 @@ class GraphRAGText2CypherChain:
 
 
 class GraphRAGPreFilterChain:
-    def __init__(self, neo4j_uri: str,
-                 neo4j_auth: Tuple[str, str],
+    def __init__(self,
                  vector_index_name: str,
                  prompt_instructions: str = '',
                  graph_prefilter_query: str = 'MATCH(node) WITH node, {} AS prefilterMetadata',
-                 k: int = 5):
+                 k: int = 5,
+                 neo4j_uri: Optional[str] = None,
+                 neo4j_username: Optional[str] = None,
+                 neo4j_password: Optional[str] = None,
+                 neo4j_database: Optional[str] = None
+                 ):
         self.vectorStore = Neo4jVector.from_existing_index(
             embedding=embedding_model,
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database,
             index_name=vector_index_name)
 
         self.store = Neo4jGraph(
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database
         )
 
         self.embedding_model = embedding_model
@@ -285,24 +310,30 @@ ORDER by score DESC LIMIT toInteger($k)
 
 
 class DynamicGraphRAGChain:
-    def __init__(self, neo4j_uri: str,
-                 neo4j_auth: Tuple[str, str],
+    def __init__(self,
                  vector_index_name: str,
                  prompt_instructions: str = '',
                  graph_retrieval_query: str = None,
-                 k: int = 5):
+                 k: int = 5,
+                 neo4j_uri: Optional[str] = None,
+                 neo4j_username: Optional[str] = None,
+                 neo4j_password: Optional[str] = None,
+                 neo4j_database: Optional[str] = None
+                 ):
         self.vectorStore = Neo4jVector.from_existing_index(
             embedding=embedding_model,
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database,
             index_name=vector_index_name,
             retrieval_query=graph_retrieval_query)
 
         self.store = Neo4jGraph(
             url=neo4j_uri,
-            username=neo4j_auth[0],
-            password=neo4j_auth[1],
+            username=neo4j_username,
+            password=neo4j_password,
+            database=neo4j_database,
         )
 
         self.embedding_model = embedding_model
