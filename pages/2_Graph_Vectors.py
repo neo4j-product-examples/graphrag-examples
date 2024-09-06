@@ -6,6 +6,7 @@ from ui_utils import render_header_svg, get_neo4j_url_from_uri
 HM_NEO4J_URI = st.secrets['HM_NEO4J_URI']
 HM_NEO4J_USERNAME = st.secrets['HM_NEO4J_USERNAME']
 HM_NEO4J_PASSWORD = st.secrets['HM_NEO4J_PASSWORD']
+HM_NEO4J_DATABASE = st.secrets.get('HM_NEO4J_DATABASE', 'neo4j')
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 render_header_svg("images/graphrag.svg", 200)
@@ -35,13 +36,17 @@ RETURN product.`text` AS text,
 ORDER by score DESC LIMIT 20"""
 
 graph_vector_chain = DynamicGraphRAGChain(neo4j_uri=HM_NEO4J_URI,
-                                          neo4j_auth=(HM_NEO4J_USERNAME, HM_NEO4J_PASSWORD),
+                                          neo4j_username=HM_NEO4J_USERNAME,
+                                          neo4j_password=HM_NEO4J_PASSWORD,
+                                          neo4j_database=HM_NEO4J_DATABASE,
                                           vector_index_name='product_text_embeddings',
                                           graph_retrieval_query=graph_retrieval_query,
                                           k=10)
 
 vector_only_chain = DynamicGraphRAGChain(neo4j_uri=HM_NEO4J_URI,
-                                         neo4j_auth=(HM_NEO4J_USERNAME, HM_NEO4J_PASSWORD),
+                                         neo4j_username=HM_NEO4J_USERNAME,
+                                         neo4j_password=HM_NEO4J_PASSWORD,
+                                         neo4j_database=HM_NEO4J_DATABASE,
                                          vector_index_name='product_text_embeddings',
                                          k=10)
 

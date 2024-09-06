@@ -6,6 +6,7 @@ from ui_utils import render_header_svg, get_neo4j_url_from_uri
 NORTHWIND_NEO4J_URI = st.secrets['NORTHWIND_NEO4J_URI']
 NORTHWIND_NEO4J_USERNAME = st.secrets['NORTHWIND_NEO4J_USERNAME']
 NORTHWIND_NEO4J_PASSWORD = st.secrets['NORTHWIND_NEO4J_PASSWORD']
+NORTHWIND_NEO4J_DATABASE = st.secrets.get('NORTHWIND_NEO4J_DATABASE', 'neo4j')
 
 st.set_page_config(page_icon="images/logo-mark-fullcolor-RGB-transBG.svg", layout="wide")
 render_header_svg("images/graphrag.svg", 200)
@@ -54,14 +55,18 @@ vector_index_name = 'product_text_embeddings'
 
 vector_only_rag_chain = GraphRAGChain(
     neo4j_uri=NORTHWIND_NEO4J_URI,
-    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    neo4j_username=NORTHWIND_NEO4J_USERNAME,
+    neo4j_password=NORTHWIND_NEO4J_PASSWORD,
+    neo4j_database=NORTHWIND_NEO4J_DATABASE,
     vector_index_name=vector_index_name,
     prompt_instructions=prompt_instructions_vector_only,
     k=top_k_vector_only)
 
 graphrag_t2c_chain = GraphRAGText2CypherChain(
     neo4j_uri=NORTHWIND_NEO4J_URI,
-    neo4j_auth=(NORTHWIND_NEO4J_USERNAME, NORTHWIND_NEO4J_PASSWORD),
+    neo4j_username=NORTHWIND_NEO4J_USERNAME,
+    neo4j_password=NORTHWIND_NEO4J_PASSWORD,
+    neo4j_database=NORTHWIND_NEO4J_DATABASE,
     prompt_instructions=prompt_instructions_with_schema,
     properties_to_remove_from_cypher_res=['textEmbedding'])
 
