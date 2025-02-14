@@ -1,0 +1,1216 @@
+{
+  "version": "2.3.0",
+  "visualisation": {
+    "nodes": [
+      {
+        "id": "n:0",
+        "position": {
+          "x": 190.45005852867888,
+          "y": 93.56611600035431
+        }
+      },
+      {
+        "id": "n:1",
+        "position": {
+          "x": -550,
+          "y": 150
+        }
+      },
+      {
+        "id": "n:2",
+        "position": {
+          "x": -211.77470806524556,
+          "y": 172.1422027649793
+        }
+      },
+      {
+        "id": "n:3",
+        "position": {
+          "x": 0.5538236085883312,
+          "y": 103.94443251056332
+        }
+      },
+      {
+        "id": "n:4",
+        "position": {
+          "x": -384.2217461437694,
+          "y": 190.08619622698393
+        }
+      },
+      {
+        "id": "n:6",
+        "position": {
+          "x": -212.2712055660224,
+          "y": 20.490943643440914
+        }
+      },
+      {
+        "id": "n:7",
+        "position": {
+          "x": -377.62576889872366,
+          "y": 77.21842822769258
+        }
+      }
+    ]
+  },
+  "dataModel": {
+    "version": "2.3.0",
+    "graphSchemaRepresentation": {
+      "version": "1.0.0",
+      "graphSchema": {
+        "nodeLabels": [
+          {
+            "$id": "http://neo4j.com/customer/Customer",
+            "token": "Customer",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/age",
+                "token": "age",
+                "type": {
+                  "type": "integer"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/clubMemberStatus",
+                "token": "clubMemberStatus",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/customerId",
+                "token": "customerId",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/fashionNewsFrequency",
+                "token": "fashionNewsFrequency",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/postalCode",
+                "token": "postalCode",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/ProductType",
+            "token": "ProductType",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/name",
+                "token": "name",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/Article",
+            "token": "Article",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/articleId",
+                "token": "articleId",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/colourGroupCode",
+                "token": "colourGroupCode",
+                "type": {
+                  "type": "integer"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/colourGroupName",
+                "token": "colourGroupName",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/graphicalAppearanceName",
+                "token": "graphicalAppearanceName",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/graphicalAppearanceNo",
+                "token": "graphicalAppearanceNo",
+                "type": {
+                  "type": "integer"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/Order",
+            "token": "Order",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/date",
+                "token": "date",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/orderId",
+                "token": "orderId",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/Product",
+            "token": "Product",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/description",
+                "token": "description",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/name",
+                "token": "name",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/productCode",
+                "token": "productCode",
+                "type": {
+                  "type": "integer"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/Supplier",
+            "token": "Supplier",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/address",
+                "token": "address",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/name",
+                "token": "name",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              {
+                "$id": "http://neo4j.com/customer/supplierId",
+                "token": "supplierId",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/ProductCategory",
+            "token": "ProductCategory",
+            "properties": [
+              {
+                "$id": "http://neo4j.com/customer/name",
+                "token": "name",
+                "type": {
+                  "type": "string"
+                },
+                "nullable": true
+              }
+            ]
+          }
+        ],
+        "relationshipTypes": [
+          {
+            "$id": "http://neo4j.com/customer/Customerhttp://neo4j.com/customer/ORDEREDhttp://neo4j.com/customer/Order",
+            "token": "ORDERED",
+            "properties": []
+          },
+          {
+            "$id": "http://neo4j.com/customer/Articlehttp://neo4j.com/customer/SUPPLIED_BYhttp://neo4j.com/customer/Supplier",
+            "token": "SUPPLIED_BY",
+            "properties": []
+          },
+          {
+            "$id": "http://neo4j.com/customer/Articlehttp://neo4j.com/customer/VARIANT_OFhttp://neo4j.com/customer/Product",
+            "token": "VARIANT_OF",
+            "properties": []
+          },
+          {
+            "$id": "http://neo4j.com/customer/Orderhttp://neo4j.com/customer/CONTAINShttp://neo4j.com/customer/Article",
+            "token": "CONTAINS",
+            "properties": [
+              {
+                "$id": "p:1",
+                "token": "price",
+                "type": {
+                  "type": "float"
+                },
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "$id": "http://neo4j.com/customer/Producthttp://neo4j.com/customer/PART_OFhttp://neo4j.com/customer/ProductType",
+            "token": "PART_OF",
+            "properties": []
+          },
+          {
+            "$id": "http://neo4j.com/customer/Producthttp://neo4j.com/customer/PART_OFhttp://neo4j.com/customer/ProductCategory",
+            "token": "PART_OF",
+            "properties": []
+          }
+        ],
+        "nodeObjectTypes": [
+          {
+            "$id": "n:0",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/Customer"
+              }
+            ]
+          },
+          {
+            "$id": "n:1",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/ProductType"
+              }
+            ]
+          },
+          {
+            "$id": "n:2",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/Article"
+              }
+            ]
+          },
+          {
+            "$id": "n:3",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/Order"
+              }
+            ]
+          },
+          {
+            "$id": "n:4",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/Product"
+              }
+            ]
+          },
+          {
+            "$id": "n:6",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/Supplier"
+              }
+            ]
+          },
+          {
+            "$id": "n:7",
+            "labels": [
+              {
+                "$ref": "#http://neo4j.com/customer/ProductCategory"
+              }
+            ]
+          }
+        ],
+        "relationshipObjectTypes": [
+          {
+            "$id": "r:0",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Customerhttp://neo4j.com/customer/ORDEREDhttp://neo4j.com/customer/Order"
+            },
+            "from": {
+              "$ref": "#n:0"
+            },
+            "to": {
+              "$ref": "#n:3"
+            }
+          },
+          {
+            "$id": "r:1",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Articlehttp://neo4j.com/customer/SUPPLIED_BYhttp://neo4j.com/customer/Supplier"
+            },
+            "from": {
+              "$ref": "#n:2"
+            },
+            "to": {
+              "$ref": "#n:6"
+            }
+          },
+          {
+            "$id": "r:2",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Articlehttp://neo4j.com/customer/VARIANT_OFhttp://neo4j.com/customer/Product"
+            },
+            "from": {
+              "$ref": "#n:2"
+            },
+            "to": {
+              "$ref": "#n:4"
+            }
+          },
+          {
+            "$id": "r:3",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Orderhttp://neo4j.com/customer/CONTAINShttp://neo4j.com/customer/Article"
+            },
+            "from": {
+              "$ref": "#n:3"
+            },
+            "to": {
+              "$ref": "#n:2"
+            }
+          },
+          {
+            "$id": "r:4",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Producthttp://neo4j.com/customer/PART_OFhttp://neo4j.com/customer/ProductType"
+            },
+            "from": {
+              "$ref": "#n:4"
+            },
+            "to": {
+              "$ref": "#n:1"
+            }
+          },
+          {
+            "$id": "r:5",
+            "type": {
+              "$ref": "#http://neo4j.com/customer/Producthttp://neo4j.com/customer/PART_OFhttp://neo4j.com/customer/ProductCategory"
+            },
+            "from": {
+              "$ref": "#n:4"
+            },
+            "to": {
+              "$ref": "#n:7"
+            }
+          }
+        ],
+        "constraints": [
+          {
+            "$id": "c:1",
+            "name": "articleId_Article_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Article"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/articleId"
+              }
+            ]
+          },
+          {
+            "$id": "c:2",
+            "name": "supplierId_Supplier_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Supplier"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/supplierId"
+              }
+            ]
+          },
+          {
+            "$id": "c:3",
+            "name": "productCode_Product_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Product"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/productCode"
+              }
+            ]
+          },
+          {
+            "$id": "c:4",
+            "name": "name_ProductCategory_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/ProductCategory"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/name"
+              }
+            ]
+          },
+          {
+            "$id": "c:5",
+            "name": "name_ProductType_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/ProductType"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/name"
+              }
+            ]
+          },
+          {
+            "$id": "c:6",
+            "name": "orderId_Order_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Order"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/orderId"
+              }
+            ]
+          },
+          {
+            "$id": "c:7",
+            "name": "customerId_Customer_uniq",
+            "constraintType": "uniqueness",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Customer"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/customerId"
+              }
+            ]
+          }
+        ],
+        "indexes": [
+          {
+            "$id": "i:1",
+            "name": "articleId_Article_uniq",
+            "indexType": "default",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Article"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/articleId"
+              }
+            ]
+          },
+          {
+            "$id": "i:2",
+            "name": "supplierId_Supplier_uniq",
+            "indexType": "default",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Supplier"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/supplierId"
+              }
+            ]
+          },
+          {
+            "$id": "i:3",
+            "name": "productCode_Product_uniq",
+            "indexType": "default",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Product"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/productCode"
+              }
+            ]
+          },
+          {
+            "$id": "i:5",
+            "name": "orderId_Order_uniq",
+            "indexType": "default",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Order"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/orderId"
+              }
+            ]
+          },
+          {
+            "$id": "i:6",
+            "name": "customerId_Customer_uniq",
+            "indexType": "default",
+            "entityType": "node",
+            "nodeLabel": {
+              "$ref": "#http://neo4j.com/customer/Customer"
+            },
+            "properties": [
+              {
+                "$ref": "#http://neo4j.com/customer/customerId"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "graphSchemaExtensionsRepresentation": {
+      "nodeKeyProperties": [
+        {
+          "node": {
+            "$ref": "#n:2"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/articleId"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:6"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/supplierId"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:4"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/productCode"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:7"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/name"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:1"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/name"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:3"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/orderId"
+          }
+        },
+        {
+          "node": {
+            "$ref": "#n:0"
+          },
+          "keyProperty": {
+            "$ref": "#http://neo4j.com/customer/customerId"
+          }
+        }
+      ]
+    },
+    "graphMappingRepresentation": {
+      "dataSourceSchema": {
+        "type": "local",
+        "tableSchemas": [
+          {
+            "name": "articles.csv",
+            "expanded": true,
+            "fields": [
+              {
+                "name": "articleId",
+                "sample": "108775015",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "productCode",
+                "sample": "108775",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "supplierId",
+                "sample": "1676",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "prodName",
+                "sample": "Strap top",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "productTypeName",
+                "sample": "Vest top",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "graphicalAppearanceNo",
+                "sample": "1010016",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "graphicalAppearanceName",
+                "sample": "Solid",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "colourGroupCode",
+                "sample": "9",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "colourGroupName",
+                "sample": "Black",
+                "recommendedType": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "suppliers.csv",
+            "expanded": true,
+            "fields": [
+              {
+                "name": "supplierId",
+                "sample": "1676",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "supplierName",
+                "sample": "1676 - Jersey Mills",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "supplierAddress",
+                "sample": "862 Textile Blvd., Chicago, NY, USA",
+                "recommendedType": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "customers.csv",
+            "expanded": true,
+            "fields": [
+              {
+                "name": "customerId",
+                "sample": "00264b7d4cd6498292e8a355b699c2d07725d123f04867fc4cd204dc4fa286a5",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "fn",
+                "sample": "1.0",
+                "recommendedType": {
+                  "type": "float"
+                }
+              },
+              {
+                "name": "active",
+                "sample": "1.0",
+                "recommendedType": {
+                  "type": "float"
+                }
+              },
+              {
+                "name": "clubMemberStatus",
+                "sample": "ACTIVE",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "fashionNewsFrequency",
+                "sample": "Regularly",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "age",
+                "sample": "53.0",
+                "recommendedType": {
+                  "type": "float"
+                }
+              },
+              {
+                "name": "postalCode",
+                "sample": "2c29ae653a9282cce4151bd87643c907644e09541abc28ae87dea0d1f6603b1c",
+                "recommendedType": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "order-details.csv",
+            "expanded": true,
+            "fields": [
+              {
+                "name": "orderId",
+                "sample": "0",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "txId",
+                "sample": "6910064",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "tDat",
+                "sample": "2019-03-03",
+                "recommendedType": {
+                  "type": "datetime"
+                }
+              },
+              {
+                "name": "customerId",
+                "sample": "00264b7d4cd6498292e8a355b699c2d07725d123f04867fc4cd204dc4fa286a5",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "articleId",
+                "sample": "691695001",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "price",
+                "sample": "0.0121864406779661",
+                "recommendedType": {
+                  "type": "float"
+                }
+              },
+              {
+                "name": "salesChannelId",
+                "sample": "1",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          {
+            "name": "products.csv",
+            "expanded": true,
+            "fields": [
+              {
+                "name": "productCode",
+                "sample": "108775",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "prodName",
+                "sample": "Strap top",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "productTypeNo",
+                "sample": "253",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "productTypeName",
+                "sample": "Vest top",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "productGroupName",
+                "sample": "Garment Upper body",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "garmentGroupNo",
+                "sample": "1002",
+                "recommendedType": {
+                  "type": "integer"
+                }
+              },
+              {
+                "name": "garmentGroupName",
+                "sample": "Jersey Basic",
+                "recommendedType": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "detailDesc",
+                "sample": "Jersey top with narrow shoulder straps.",
+                "recommendedType": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "nodeMappings": [
+        {
+          "node": {
+            "$ref": "#n:6"
+          },
+          "tableName": "suppliers.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/address"
+              },
+              "fieldName": "supplierAddress"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/name"
+              },
+              "fieldName": "supplierName"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/supplierId"
+              },
+              "fieldName": "supplierId"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:2"
+          },
+          "tableName": "articles.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/articleId"
+              },
+              "fieldName": "articleId"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/colourGroupCode"
+              },
+              "fieldName": "colourGroupCode"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/colourGroupName"
+              },
+              "fieldName": "colourGroupName"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/graphicalAppearanceNo"
+              },
+              "fieldName": "graphicalAppearanceNo"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/graphicalAppearanceName"
+              },
+              "fieldName": "graphicalAppearanceName"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:4"
+          },
+          "tableName": "products.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/description"
+              },
+              "fieldName": "detailDesc"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/name"
+              },
+              "fieldName": "prodName"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/productCode"
+              },
+              "fieldName": "productCode"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:7"
+          },
+          "tableName": "products.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/name"
+              },
+              "fieldName": "productGroupName"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:1"
+          },
+          "tableName": "products.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/name"
+              },
+              "fieldName": "productTypeName"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:3"
+          },
+          "tableName": "order-details.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/date"
+              },
+              "fieldName": "tDat"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/orderId"
+              },
+              "fieldName": "orderId"
+            }
+          ]
+        },
+        {
+          "node": {
+            "$ref": "#n:0"
+          },
+          "tableName": "customers.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/age"
+              },
+              "fieldName": "age"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/clubMemberStatus"
+              },
+              "fieldName": "clubMemberStatus"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/customerId"
+              },
+              "fieldName": "customerId"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/fashionNewsFrequency"
+              },
+              "fieldName": "fashionNewsFrequency"
+            },
+            {
+              "property": {
+                "$ref": "#http://neo4j.com/customer/postalCode"
+              },
+              "fieldName": "postalCode"
+            }
+          ]
+        }
+      ],
+      "relationshipMappings": [
+        {
+          "relationship": {
+            "$ref": "#r:1"
+          },
+          "tableName": "articles.csv",
+          "propertyMappings": [],
+          "toMapping": {
+            "fieldName": "supplierId"
+          },
+          "fromMapping": {
+            "fieldName": "articleId"
+          }
+        },
+        {
+          "relationship": {
+            "$ref": "#r:5"
+          },
+          "tableName": "products.csv",
+          "propertyMappings": [],
+          "fromMapping": {
+            "fieldName": "productCode"
+          },
+          "toMapping": {
+            "fieldName": "productGroupName"
+          }
+        },
+        {
+          "relationship": {
+            "$ref": "#r:4"
+          },
+          "tableName": "products.csv",
+          "propertyMappings": [],
+          "fromMapping": {
+            "fieldName": "productCode"
+          },
+          "toMapping": {
+            "fieldName": "productTypeName"
+          }
+        },
+        {
+          "relationship": {
+            "$ref": "#r:2"
+          },
+          "tableName": "articles.csv",
+          "propertyMappings": [],
+          "fromMapping": {
+            "fieldName": "articleId"
+          },
+          "toMapping": {
+            "fieldName": "productCode"
+          }
+        },
+        {
+          "relationship": {
+            "$ref": "#r:3"
+          },
+          "tableName": "order-details.csv",
+          "propertyMappings": [
+            {
+              "property": {
+                "$ref": "#p:1"
+              },
+              "fieldName": "price"
+            }
+          ],
+          "fromMapping": {
+            "fieldName": "orderId"
+          },
+          "toMapping": {
+            "fieldName": "articleId"
+          }
+        },
+        {
+          "relationship": {
+            "$ref": "#r:0"
+          },
+          "tableName": "order-details.csv",
+          "propertyMappings": [],
+          "fromMapping": {
+            "fieldName": "customerId"
+          },
+          "toMapping": {
+            "fieldName": "orderId"
+          }
+        }
+      ]
+    },
+    "configurations": {
+      "idsToIgnore": []
+    }
+  }
+}
