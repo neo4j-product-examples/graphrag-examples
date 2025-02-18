@@ -72,9 +72,43 @@ kg_builder = SimpleKGPipeline(
 )
 
 # LOAD PRODUCT DESCRIPTIONS
-asyncio.run(kg_builder.run_async(file_path='data/fashion-catalog.pdf'))
+#asyncio.run(kg_builder.run_async(file_path='data/fashion-catalog.pdf'))
 
 
 # LOAD CREDIT NOTES
-#asyncio.run(kg_builder.run_async(file_path='data/credit-notes.pdf'))
+asyncio.run(kg_builder.run_async(file_path='data/credit-notes.pdf'))
+
+# perform entity resolution
+print("Performing Entity Resolution")
+driver.execute_query('''
+MATCH (n:Article)
+WITH n.articleId AS id, collect(n) as nodes
+CALL apoc.refactor.mergeNodes(nodes, {
+  properties: {
+      `.*`: 'combine'
+  },
+  mergeRels: true
+})
+YIELD node
+RETURN node;
+''')
+
+driver.execute_query('''
+MATCH (n:Order)
+WITH n.orderId AS id, collect(n) as nodes
+CALL apoc.refactor.mergeNodes(nodes, {
+  properties: {
+      `.*`: 'combine'
+  },
+  mergeRels: true
+})
+YIELD node
+RETURN node
+''')
+
+
+print("Removing Unneeded Nodes")
+driver.execute_query('MATCH (n:Product) WHERE n:__Entity__ DETACH DELETE n')
+
+
 driver.close()

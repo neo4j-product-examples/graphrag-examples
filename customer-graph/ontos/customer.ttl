@@ -147,7 +147,8 @@
 ###  http://neo4j.com/customer/date
 <http://neo4j.com/customer/date> rdf:type owl:DatatypeProperty ;
                                  rdfs:subPropertyOf owl:topDataProperty ;
-                                 rdfs:domain <http://neo4j.com/customer/Event> ;
+                                 rdfs:domain <http://neo4j.com/customer/CreditNote> ,
+                                             <http://neo4j.com/customer/Event> ;
                                  rdfs:range xsd:dateTime ;
                                  rdfs:label "date" .
 
@@ -291,7 +292,7 @@
 ###  http://neo4j.com/customer/Product
 <http://neo4j.com/customer/Product> rdf:type owl:Class ;
                                     rdfs:subClassOf <http://neo4j.com/customer/Item> ;
-                                    rdfs:comment "requires a productCode property. should ideally have both a name and description if provided text is available. Where name is short (a few words) and description is long form (sentence or multiple sentences)."^^xsd:string ;
+                                    rdfs:comment "requires a numeric productCode property. Do not create if no numeric product code is present. should ideally have both a name and description if provided text is available. Where name is short (a few words) and description is long form (sentence or multiple sentences)."^^xsd:string ;
                                     rdfs:label "Product" .
 
 

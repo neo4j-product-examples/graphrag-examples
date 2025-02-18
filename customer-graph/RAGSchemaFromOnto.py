@@ -1,4 +1,4 @@
-from rdflib import Graph, URIRef
+from rdflib import Graph, URIRef, XSD
 from rdflib.namespace import RDF, OWL, RDFS, DefinedNamespace, Namespace
 from neo4j_graphrag.experimental.components.schema import (
     SchemaBuilder,
@@ -67,8 +67,10 @@ def getPropertiesForClass(g, cat):
   for dtp in g.subjects(RDFS.domain,cat):
     if (dtp, RDF.type, OWL.DatatypeProperty) in g:
       propName = getLocalPart(dtp)
-      propDesc = next(g.objects(dtp,RDFS.comment),"") 
-      props.append(SchemaProperty(name=propName, type="STRING", description=propDesc))
+      propDesc = next(g.objects(dtp, RDFS.comment),"")
+      props.append(SchemaProperty(name=propName,
+                                  type=convert_to_di_data_type(next(g.objects(dtp, RDFS.range),"")),
+                                  description=propDesc))
   return props
 
 def getSchemaFromOnto(path) -> SchemaConfig:
@@ -134,4 +136,17 @@ def getPKs(g):
   for k in g.subjects(RDF.type, OWL.InverseFunctionalProperty):  
     keys.append(getLocalPart(k))
   return keys
-  
+
+
+def convert_to_di_data_type(datatype):
+  if datatype in {XSD.integer, XSD.int, XSD.positiveInteger, XSD.negativeInteger, XSD.nonPositiveInteger,
+                  XSD.nonNegativeInteger, XSD.long, XSD.short, XSD.unsignedLong, XSD.unsignedShort}:
+      return "INTEGER"
+  elif datatype in {XSD.decimal, XSD.float, XSD.double}:
+      return "FLOAT"
+  elif datatype == XSD.boolean:
+      return "BOOLEAN"
+  #elif datatype == XSD.dateTime:
+  #    return "LOCAL_DATETIME"
+  else:
+      return "STRING"
