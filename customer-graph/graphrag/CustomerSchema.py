@@ -67,10 +67,15 @@ class Customer(Entity):
     age: str
     clubMemberStatus: str
     customerId: int
+    segmentId: int
     fashionNewsFrequency: str
     postalCode: int
     ORDERED: List[Order]
 
+
+class CustomerSegment(TypedDict):
+    segmentId: int
+    numberOfCustomers: int
 
 
 

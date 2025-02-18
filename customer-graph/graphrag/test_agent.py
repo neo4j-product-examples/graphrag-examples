@@ -68,7 +68,7 @@ async def basic_agent() :
 
         # Print the results
         print("Assistant > " + str(result))
-        print("\n\n =============================")
+        print("=============================\n\n")
 
         # Add the message from the agent to the chat history
         history.add_message(result)
@@ -76,12 +76,6 @@ async def basic_agent() :
 if __name__ == "__main__":
     
     asyncio.run(basic_agent())
-
-    #OR test individual data retrieval functions
-    #asyncio.run(test_contract_search())
-    #asyncio.run(test_contracts_search())
-    #asyncio.run(test_contracts_without_clause_search())
-    #asyncio.run(test_contracts_with_clause_search())
 
 
     
