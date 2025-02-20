@@ -1,5 +1,6 @@
 from typing import TypedDict, List
 
+
 # Categories /////////////////////////////////////////////
 class Category(TypedDict):
     name: str
@@ -78,6 +79,29 @@ class CustomerSegment(TypedDict):
     numberOfCustomers: int
 
 
+class SupplierOrdersAndRefunds:
+    supplierId: int
+    name: str
+    numberOfOrders: int
+    numberOfReturns: int
 
 
+class ProductOrdersAndRefunds:
+    productCode: int
+    name: str
+    numberOfOrders: int
+    numberOfReturns: int
 
+
+class ProductInfo(TypedDict):
+    productCode: int
+    totalOrders: int
+    totalRefunds: int
+    supplierInfo: List[SupplierOrdersAndRefunds]
+
+
+class SupplierInfo(TypedDict):
+    supplierId: int
+    totalOrders: int
+    totalRefunds: int
+    productInfo: List[ProductOrdersAndRefunds]
