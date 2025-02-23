@@ -55,8 +55,5 @@ OPTIONS {indexConfig: {
 driver.execute_query('CALL db.awaitIndex("product_text_embeddings", 300)')
 
 
-# remove unnecessary node_labels
-driver.execute_query('MATCH(n:__Entity__) SET n.kgBuilderEntity=TRUE REMOVE n:__Entity__, n:__KGBuilder__')
-
 driver.close()
 
