@@ -5,8 +5,8 @@ from operator import itemgetter
 from typing import Dict, List, Tuple, Optional
 
 from langchain.prompts.prompt import PromptTemplate
-from langchain_community.graphs.neo4j_graph import Neo4jGraph
-from langchain_community.vectorstores.neo4j_vector import Neo4jVector
+from langchain_neo4j import Neo4jGraph
+from langchain_neo4j import Neo4jVector
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda

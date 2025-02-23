@@ -1,5 +1,5 @@
-# GraphRAG Examples
-This repo contains a streamlit app for introducing and teaching example GraphRAG patterns.
+# GraphRAG Patterns
+This directory contains a streamlit app for introducing and teaching example GraphRAG patterns.
 
 ## Running the Streamlit App
 Follow the below steps to run the sample app:
@@ -58,11 +58,11 @@ __To Load the H&M Fashion Dataset__:
    HM_NEO4J_PASSWORD = "<password>"
    HM_AURA_DS = false
     ```
-3. Install requirements (recommended in an isolated python virtual environment): 
+3. Install requirements (recommended in an isolated python virtual environment). Note it is in the root directory of the project.
    ```bash 
    pip install -r requirements.txt
    ```
 
 ### 3. Run the App
-Run the app with the command: `streamlit run Home.py --server.port=80`
+Run the app with the command: `streamlit run Home.py`
 
