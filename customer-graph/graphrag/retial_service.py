@@ -3,7 +3,7 @@ import logging
 
 from neo4j import GraphDatabase
 from typing import List
-from CustomerSchema import Product, CustomerSegment, Supplier, ProductInfo, SupplierInfo
+from customer_schema import Product, CustomerSegment, Supplier, ProductInfo, SupplierInfo
 from neo4j_graphrag.retrievers import VectorCypherRetriever, Text2CypherRetriever, VectorRetriever
 from neo4j_graphrag.embeddings import OpenAIEmbeddings
 from formatters import node_record_formatter

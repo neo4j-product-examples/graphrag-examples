@@ -11,22 +11,19 @@ from neo4j_graphrag.experimental.components.text_splitters.langchain import Lang
 from neo4j_graphrag.experimental.components.types import PdfDocument, DocumentInfo
 from neo4j_graphrag.experimental.pipeline.kg_builder import SimpleKGPipeline
 from neo4j_graphrag.llm.openai_llm import OpenAILLM
-from neo4j_graphrag.experimental.components.resolver import SinglePropertyExactMatchResolver
-from rdflib import Graph
-from RAGSchemaFromOnto import getSchemaFromOnto
+from rag_schema_from_onto import getSchemaFromOnto
 
 load_dotenv()
-NEO4J_URI=os.getenv("NEO4J_URI")
-NEO4J_USERNAME=os.getenv("NEO4J_USERNAME")
-NEO4J_PASSWORD=os.getenv("NEO4J_PASSWORD")
-
-
+NEO4J_URI = os.getenv("NEO4J_URI")
+NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 # Connect to the Neo4j database
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
 
 neo4j_schema = getSchemaFromOnto("ontos/customer.ttl")
 print(neo4j_schema)
+
 
 # Create DocumentLoader
 class PdfLoaderWithPageBreaks(DataLoader):
@@ -37,7 +34,8 @@ class PdfLoaderWithPageBreaks(DataLoader):
             text = text + " __PAGE__BREAK__ " + page.page_content
         return PdfDocument(
             text=text,
-            document_info=DocumentInfo(path=filepath),)
+            document_info=DocumentInfo(path=filepath), )
+
 
 # Create a Splitter object
 splitter = LangChainTextSplitterAdapter(
@@ -57,7 +55,7 @@ llm = OpenAILLM(
     },
 )
 
-#Instantiate the SimpleKGPipeline
+# instantiate the SimpleKGPipeline
 kg_builder = SimpleKGPipeline(
     llm=llm,
     driver=driver,
@@ -71,15 +69,11 @@ kg_builder = SimpleKGPipeline(
     from_pdf=True,
 )
 
-# LOAD PRODUCT DESCRIPTIONS
-#asyncio.run(kg_builder.run_async(file_path='data/fashion-catalog.pdf'))
-
-
-# LOAD CREDIT NOTES
+# load credit notes
 asyncio.run(kg_builder.run_async(file_path='data/credit-notes.pdf'))
 
 # perform entity resolution
-print("Performing Entity Resolution")
+print("Performing Additional Entity Resolution")
 driver.execute_query('''
 MATCH (n:Article)
 WITH n.articleId AS id, collect(n) as nodes
@@ -106,9 +100,7 @@ YIELD node
 RETURN node
 ''')
 
-
 print("Removing Unneeded Nodes")
 driver.execute_query('MATCH (n:Product) WHERE n:__Entity__ DETACH DELETE n')
-
 
 driver.close()

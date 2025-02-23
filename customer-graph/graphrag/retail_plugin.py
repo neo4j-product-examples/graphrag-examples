@@ -1,9 +1,9 @@
 
 
 from typing import List, Optional, Annotated
-from CustomerSchema import Product, CustomerSegment, ProductInfo, SupplierInfo
+from customer_schema import Product, CustomerSegment, ProductInfo, SupplierInfo
 from semantic_kernel.functions import kernel_function
-from RetailService import RetailService
+from retial_service import RetailService
 
 
 class RetailPlugin:

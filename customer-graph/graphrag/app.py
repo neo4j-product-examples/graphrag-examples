@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 from semantic_kernel.contents.chat_history import ChatHistory
-from RetailPlugin import RetailPlugin
-from RetailService import RetailService
+from retail_plugin import RetailPlugin
+from retial_service import RetailService
 from semantic_kernel.connectors.ai.chat_completion_client_base import ChatCompletionClientBase
 from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.open_ai_prompt_execution_settings import (
     OpenAIChatPromptExecutionSettings)
@@ -20,7 +20,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 
 # Get info from environment
-load_dotenv()
+load_dotenv('../.env')
 OPENAI_KEY = os.getenv('OPENAI_API_KEY')
 NEO4J_URI = os.getenv('NEO4J_URI')
 NEO4J_USER = os.getenv('NEO4J_USERNAME', 'neo4j')

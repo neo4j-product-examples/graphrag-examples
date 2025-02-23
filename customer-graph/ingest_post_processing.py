@@ -39,7 +39,7 @@ with driver.session(database="neo4j") as session:
         YIELD index, vector
         CALL db.create.setNodeVectorProperty(nodes[index], "textEmbedding", vector)
     } IN TRANSACTIONS OF 1 ROW
-    ''', token=os.getenv("OPENAI_API_KEY"), numberOfBatches=100)
+    ''', token=os.getenv("OPENAI_API_KEY"), numberOfBatches=200)
 
 # create vector index on text embeddings
 print("Creating Product Vector Index")

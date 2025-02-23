@@ -6,8 +6,8 @@ from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 
 from semantic_kernel.contents.chat_history import ChatHistory
-from RetailPlugin import RetailPlugin
-from RetailService import RetailService
+from retail_plugin import RetailPlugin
+from retial_service import RetailService
 from semantic_kernel.connectors.ai.chat_completion_client_base import ChatCompletionClientBase
 from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.open_ai_prompt_execution_settings import (
     OpenAIChatPromptExecutionSettings)
