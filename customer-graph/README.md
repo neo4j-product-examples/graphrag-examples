@@ -69,6 +69,7 @@ Once complete go back to query in the Aura console. and run a simple query to sa
 ```cypher
 MATCH p=()--() RETURN p LIMIT 1000
 ```
+![](img/confirm-ingest.png)
 
 you should now see the unstructured data, the structured data, and product text/vector properties merged together on one graph!. 
 
