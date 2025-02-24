@@ -115,7 +115,7 @@ MATCH p=()--() RETURN p LIMIT 1000
 you should now see the unstructured data, the structured data, and product text/vector properties merged together on one graph!. 
 
 
-### Running the Agent
+## Running the Agent
 Currently, the best way to run the agent is through the command line tool `cli_agent.py`. The streamlit app `app.py` is a WIP and still has some issues with hanging for multi Q&A conversations. 
 
 To run, navigate to the graphrag folder and run the file:
