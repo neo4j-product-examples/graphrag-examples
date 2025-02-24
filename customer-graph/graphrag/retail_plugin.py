@@ -3,7 +3,7 @@
 from typing import List, Optional, Annotated
 from customer_schema import Product, CustomerSegment, ProductInfo, SupplierInfo
 from semantic_kernel.functions import kernel_function
-from retial_service import RetailService
+from retail_service import RetailService
 
 
 class RetailPlugin:
