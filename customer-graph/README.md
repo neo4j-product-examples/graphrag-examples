@@ -1,6 +1,6 @@
 # Customer Graph - Agentic GraphRAG
 
-This directory contains an end-to-end worked example for building a **GraphRAG agent to accelerate customer and retail analytics**. Covering the entire process from:
+This directory contains an **end-to-end worked example for building a GraphRAG agent to accelerate customer and retail analytics**. Covering the entire process from:
 
 1. **Quickly constructing a graph from mixed unstructured and structured data sources**.
 2. **Resolving and linking entities** in the graph along the way.
