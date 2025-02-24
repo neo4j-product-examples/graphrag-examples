@@ -1,0 +1,487 @@
+{
+  "schema": [
+    {
+      "relationship": "VARIANT_OF",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Article"
+        ],
+        "properties": [
+          "chunk_index",
+          "colourGroupCode",
+          "articleId",
+          "colourGroupName",
+          "id",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      },
+      "target": {
+        "label": [
+          "Product"
+        ],
+        "properties": [
+          "productCode",
+          "textEmbedding",
+          "name",
+          "description",
+          "text",
+          "url"
+        ]
+      }
+    },
+    {
+      "relationship": "FROM_CHUNK",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Article"
+        ],
+        "properties": [
+          "chunk_index",
+          "colourGroupCode",
+          "articleId",
+          "colourGroupName",
+          "id",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      }
+    },
+    {
+      "relationship": "FROM_CHUNK",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "CreditNote"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "reason",
+          "amount",
+          "id",
+          "creditNoteId"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      }
+    },
+    {
+      "relationship": "FROM_CHUNK",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "id",
+          "orderId"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      }
+    },
+    {
+      "relationship": "REFUND_OF_ARTICLE",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "CreditNote"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "reason",
+          "amount",
+          "id",
+          "creditNoteId"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Article"
+        ],
+        "properties": [
+          "chunk_index",
+          "colourGroupCode",
+          "articleId",
+          "colourGroupName",
+          "id",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      }
+    },
+    {
+      "relationship": "NEXT_CHUNK",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      }
+    },
+    {
+      "relationship": "SUPPLIED_BY",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Article"
+        ],
+        "properties": [
+          "chunk_index",
+          "colourGroupCode",
+          "articleId",
+          "colourGroupName",
+          "id",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      },
+      "target": {
+        "label": [
+          "Supplier"
+        ],
+        "properties": [
+          "name",
+          "supplierId",
+          "address"
+        ]
+      }
+    },
+    {
+      "relationship": "PART_OF",
+      "source": {
+        "label": [
+          "Product"
+        ],
+        "properties": [
+          "productCode",
+          "textEmbedding",
+          "name",
+          "description",
+          "text",
+          "url"
+        ]
+      },
+      "target": {
+        "label": [
+          "ProductCategory"
+        ],
+        "properties": [
+          "name"
+        ]
+      }
+    },
+    {
+      "relationship": "REFUND_FOR_ORDER",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "CreditNote"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "reason",
+          "amount",
+          "id",
+          "creditNoteId"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "id",
+          "orderId"
+        ]
+      }
+    },
+    {
+      "relationship": "VARIANT_OF",
+      "source": {
+        "label": [
+          "Article"
+        ],
+        "properties": [
+          "articleId",
+          "colourGroupName",
+          "colourGroupCode",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      },
+      "target": {
+        "label": [
+          "Product"
+        ],
+        "properties": [
+          "productCode",
+          "textEmbedding",
+          "name",
+          "description",
+          "text",
+          "url"
+        ]
+      }
+    },
+    {
+      "relationship": "ORDERED",
+      "source": {
+        "label": [
+          "Customer"
+        ],
+        "properties": [
+          "clubMemberStatus",
+          "postalCode",
+          "segmentId",
+          "customerId",
+          "fashionNewsFrequency",
+          "age"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "id",
+          "orderId"
+        ]
+      }
+    },
+    {
+      "relationship": "FROM_DOCUMENT",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "Chunk"
+        ],
+        "properties": [
+          "index",
+          "id",
+          "text",
+          "embedding"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "Document"
+        ],
+        "properties": [
+          "path",
+          "createdAt",
+          "id"
+        ]
+      }
+    },
+    {
+      "relationship": "ORDERED",
+      "source": {
+        "label": [
+          "Customer"
+        ],
+        "properties": [
+          "customerId",
+          "clubMemberStatus",
+          "fashionNewsFrequency",
+          "age",
+          "postalCode",
+          "segmentId"
+        ]
+      },
+      "target": {
+        "label": [
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "orderId"
+        ]
+      }
+    },
+    {
+      "relationship": "CONTAINS",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "id",
+          "orderId"
+        ]
+      },
+      "target": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Article"
+        ],
+        "properties": [
+          "chunk_index",
+          "colourGroupCode",
+          "articleId",
+          "colourGroupName",
+          "id",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      }
+    },
+    {
+      "relationship": "CONTAINS",
+      "source": {
+        "label": [
+          "__KGBuilder__",
+          "__Entity__",
+          "Order"
+        ],
+        "properties": [
+          "date",
+          "chunk_index",
+          "id",
+          "orderId"
+        ]
+      },
+      "target": {
+        "label": [
+          "Article"
+        ],
+        "properties": [
+          "articleId",
+          "colourGroupName",
+          "colourGroupCode",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      }
+    },
+    {
+      "relationship": "PART_OF",
+      "source": {
+        "label": [
+          "Product"
+        ],
+        "properties": [
+          "productCode",
+          "textEmbedding",
+          "name",
+          "description",
+          "text",
+          "url"
+        ]
+      },
+      "target": {
+        "label": [
+          "ProductType"
+        ],
+        "properties": [
+          "name"
+        ]
+      }
+    },
+    {
+      "relationship": "SUPPLIED_BY",
+      "source": {
+        "label": [
+          "Article"
+        ],
+        "properties": [
+          "articleId",
+          "colourGroupName",
+          "colourGroupCode",
+          "graphicalAppearanceNo",
+          "graphicalAppearanceName"
+        ]
+      },
+      "target": {
+        "label": [
+          "Supplier"
+        ],
+        "properties": [
+          "name",
+          "supplierId",
+          "address"
+        ]
+      }
+    }
+  ]
+}

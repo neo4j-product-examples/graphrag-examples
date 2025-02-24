@@ -1,0 +1,320 @@
+@prefix : <urn:webprotege:ontology:6505a35b-3fa1-4ff9-9b71-59ac674150ff#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <urn:webprotege:ontology:6505a35b-3fa1-4ff9-9b71-59ac674150ff> .
+
+<urn:webprotege:ontology:6505a35b-3fa1-4ff9-9b71-59ac674150ff> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://neo4j.com/customer/CONTAINS
+<http://neo4j.com/customer/CONTAINS> rdf:type owl:ObjectProperty ;
+                                     rdfs:subPropertyOf owl:topObjectProperty ;
+                                     rdfs:domain <http://neo4j.com/customer/Order> ;
+                                     rdfs:range <http://neo4j.com/customer/Article> ;
+                                     rdfs:label "CONTAINS" .
+
+
+###  http://neo4j.com/customer/ORDERED
+<http://neo4j.com/customer/ORDERED> rdf:type owl:ObjectProperty ;
+                                    rdfs:subPropertyOf owl:topObjectProperty ;
+                                    rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                    rdfs:range <http://neo4j.com/customer/Order> ;
+                                    rdfs:label "ORDERED" .
+
+
+###  http://neo4j.com/customer/PART_OF
+<http://neo4j.com/customer/PART_OF> rdf:type owl:ObjectProperty ;
+                                    rdfs:subPropertyOf owl:topObjectProperty ;
+                                    rdfs:domain <http://neo4j.com/customer/Product> ;
+                                    rdfs:range <http://neo4j.com/customer/Category> ;
+                                    rdfs:label "PART_OF" .
+
+
+###  http://neo4j.com/customer/REFUND_FOR_ORDER
+<http://neo4j.com/customer/REFUND_FOR_ORDER> rdf:type owl:ObjectProperty ;
+                                             rdfs:subPropertyOf owl:topObjectProperty ;
+                                             rdfs:domain <http://neo4j.com/customer/CreditNote> ;
+                                             rdfs:range <http://neo4j.com/customer/Order> ;
+                                             rdfs:label "REFUND_FOR_ORDER" .
+
+
+###  http://neo4j.com/customer/REFUND_OF_ARTICLE
+<http://neo4j.com/customer/REFUND_OF_ARTICLE> rdf:type owl:ObjectProperty ;
+                                              rdfs:subPropertyOf owl:topObjectProperty ;
+                                              rdfs:domain <http://neo4j.com/customer/CreditNote> ;
+                                              rdfs:range <http://neo4j.com/customer/Article> ;
+                                              rdfs:label "REFUND_OF_ARTICLE" .
+
+
+###  http://neo4j.com/customer/SUPPLIED_BY
+<http://neo4j.com/customer/SUPPLIED_BY> rdf:type owl:ObjectProperty ;
+                                        rdfs:subPropertyOf owl:topObjectProperty ;
+                                        rdfs:domain <http://neo4j.com/customer/Article> ;
+                                        rdfs:range <http://neo4j.com/customer/Supplier> ;
+                                        rdfs:label "SUPPLIED_BY" .
+
+
+###  http://neo4j.com/customer/VARIANT_OF
+<http://neo4j.com/customer/VARIANT_OF> rdf:type owl:ObjectProperty ;
+                                       rdfs:subPropertyOf owl:topObjectProperty ;
+                                       rdfs:domain <http://neo4j.com/customer/Article> ;
+                                       rdfs:range <http://neo4j.com/customer/Product> ;
+                                       rdfs:label "VARIANT_OF" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://neo4j.com/customer/address
+<http://neo4j.com/customer/address> rdf:type owl:DatatypeProperty ;
+                                    rdfs:subPropertyOf owl:topDataProperty ;
+                                    rdfs:domain <http://neo4j.com/customer/Entity> ;
+                                    rdfs:range xsd:string ;
+                                    rdfs:label "address" .
+
+
+###  http://neo4j.com/customer/age
+<http://neo4j.com/customer/age> rdf:type owl:DatatypeProperty ;
+                                rdfs:subPropertyOf owl:topDataProperty ;
+                                rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                rdfs:range xsd:integer ;
+                                rdfs:label "age" .
+
+
+###  http://neo4j.com/customer/amount
+<http://neo4j.com/customer/amount> rdf:type owl:DatatypeProperty ;
+                                   rdfs:subPropertyOf owl:topDataProperty ;
+                                   rdfs:domain <http://neo4j.com/customer/CreditNote> ;
+                                   rdfs:range xsd:float ;
+                                   rdfs:label "amount" .
+
+
+###  http://neo4j.com/customer/articleId
+<http://neo4j.com/customer/articleId> rdf:type owl:DatatypeProperty ;
+                                      rdfs:subPropertyOf owl:topDataProperty ;
+                                      rdfs:domain <http://neo4j.com/customer/Article> ;
+                                      rdfs:range xsd:integer ;
+                                      rdfs:label "articleId" .
+
+
+###  http://neo4j.com/customer/clubMemberStatus
+<http://neo4j.com/customer/clubMemberStatus> rdf:type owl:DatatypeProperty ;
+                                             rdfs:subPropertyOf owl:topDataProperty ;
+                                             rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                             rdfs:range xsd:string ;
+                                             rdfs:label "clubMemberStatus" .
+
+
+###  http://neo4j.com/customer/colourGroupCode
+<http://neo4j.com/customer/colourGroupCode> rdf:type owl:DatatypeProperty ;
+                                            rdfs:subPropertyOf owl:topDataProperty ;
+                                            rdfs:domain <http://neo4j.com/customer/Article> ;
+                                            rdfs:range xsd:integer ;
+                                            rdfs:label "colourGroupCode" .
+
+
+###  http://neo4j.com/customer/colourGroupName
+<http://neo4j.com/customer/colourGroupName> rdf:type owl:DatatypeProperty ;
+                                            rdfs:subPropertyOf owl:topDataProperty ;
+                                            rdfs:domain <http://neo4j.com/customer/Article> ;
+                                            rdfs:range xsd:string ;
+                                            rdfs:label "colourGroupName" .
+
+
+###  http://neo4j.com/customer/creditNoteId
+<http://neo4j.com/customer/creditNoteId> rdf:type owl:DatatypeProperty ;
+                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                         rdfs:domain <http://neo4j.com/customer/CreditNote> ;
+                                         rdfs:range xsd:string ;
+                                         rdfs:label "creditNoteId" .
+
+
+###  http://neo4j.com/customer/customerId
+<http://neo4j.com/customer/customerId> rdf:type owl:DatatypeProperty ;
+                                       rdfs:subPropertyOf owl:topDataProperty ;
+                                       rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                       rdfs:range xsd:string ;
+                                       rdfs:label "customerId" .
+
+
+###  http://neo4j.com/customer/date
+<http://neo4j.com/customer/date> rdf:type owl:DatatypeProperty ;
+                                 rdfs:subPropertyOf owl:topDataProperty ;
+                                 rdfs:domain <http://neo4j.com/customer/CreditNote> ,
+                                             <http://neo4j.com/customer/Event> ;
+                                 rdfs:range xsd:dateTime ;
+                                 rdfs:label "date" .
+
+
+###  http://neo4j.com/customer/description
+<http://neo4j.com/customer/description> rdf:type owl:DatatypeProperty ;
+                                        rdfs:subPropertyOf owl:topDataProperty ;
+                                        rdfs:domain <http://neo4j.com/customer/Product> ;
+                                        rdfs:range xsd:string ;
+                                        rdfs:comment "A long form text description of the product. can be multiple sentences."^^xsd:string ;
+                                        rdfs:label "description" .
+
+
+###  http://neo4j.com/customer/fashionNewsFrequency
+<http://neo4j.com/customer/fashionNewsFrequency> rdf:type owl:DatatypeProperty ;
+                                                 rdfs:subPropertyOf owl:topDataProperty ;
+                                                 rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                                 rdfs:range xsd:string ;
+                                                 rdfs:label "fashionNewsFrequency" .
+
+
+###  http://neo4j.com/customer/graphicalAppearanceName
+<http://neo4j.com/customer/graphicalAppearanceName> rdf:type owl:DatatypeProperty ;
+                                                    rdfs:subPropertyOf owl:topDataProperty ;
+                                                    rdfs:domain <http://neo4j.com/customer/Article> ;
+                                                    rdfs:range xsd:string ;
+                                                    rdfs:label "graphicalAppearanceName" .
+
+
+###  http://neo4j.com/customer/graphicalAppearanceNo
+<http://neo4j.com/customer/graphicalAppearanceNo> rdf:type owl:DatatypeProperty ;
+                                                  rdfs:subPropertyOf owl:topDataProperty ;
+                                                  rdfs:domain <http://neo4j.com/customer/Article> ;
+                                                  rdfs:range xsd:integer ;
+                                                  rdfs:label "graphicalAppearanceNo" .
+
+
+###  http://neo4j.com/customer/name
+<http://neo4j.com/customer/name> rdf:type owl:DatatypeProperty ;
+                                 rdfs:subPropertyOf owl:topDataProperty ;
+                                 rdfs:domain <http://neo4j.com/customer/Category> ,
+                                             <http://neo4j.com/customer/Entity> ,
+                                             <http://neo4j.com/customer/Item> ,
+                                             <http://neo4j.com/customer/Product> ;
+                                 rdfs:range xsd:string ;
+                                 rdfs:comment "A descriptive name for the Category, Type, Item or Entity"^^xsd:string ;
+                                 rdfs:label "name" .
+
+
+###  http://neo4j.com/customer/orderId
+<http://neo4j.com/customer/orderId> rdf:type owl:DatatypeProperty ;
+                                    rdfs:subPropertyOf owl:topDataProperty ;
+                                    rdfs:domain <http://neo4j.com/customer/Order> ;
+                                    rdfs:range xsd:integer ;
+                                    rdfs:label "orderId" .
+
+
+###  http://neo4j.com/customer/postalCode
+<http://neo4j.com/customer/postalCode> rdf:type owl:DatatypeProperty ;
+                                       rdfs:subPropertyOf owl:topDataProperty ;
+                                       rdfs:domain <http://neo4j.com/customer/Customer> ;
+                                       rdfs:range xsd:string ;
+                                       rdfs:label "postalCode" .
+
+
+###  http://neo4j.com/customer/productCode
+<http://neo4j.com/customer/productCode> rdf:type owl:DatatypeProperty ;
+                                        rdfs:domain <http://neo4j.com/customer/Product> ;
+                                        rdfs:range xsd:integer ;
+                                        rdfs:label "productCode" .
+
+
+###  http://neo4j.com/customer/reason
+<http://neo4j.com/customer/reason> rdf:type owl:DatatypeProperty ;
+                                   rdfs:subPropertyOf owl:topDataProperty ;
+                                   rdfs:domain <http://neo4j.com/customer/CreditNote> ;
+                                   rdfs:range xsd:string ;
+                                   rdfs:label "reason" .
+
+
+###  http://neo4j.com/customer/supplierId
+<http://neo4j.com/customer/supplierId> rdf:type owl:DatatypeProperty ;
+                                       rdfs:subPropertyOf owl:topDataProperty ;
+                                       rdfs:domain <http://neo4j.com/customer/Supplier> ;
+                                       rdfs:range xsd:integer ;
+                                       rdfs:label "supplierId" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://neo4j.com/customer/Article
+<http://neo4j.com/customer/Article> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://neo4j.com/customer/Item> ;
+                                    rdfs:comment "requires an articleId property"^^xsd:string ;
+                                    rdfs:label "Article" .
+
+
+###  http://neo4j.com/customer/Category
+<http://neo4j.com/customer/Category> rdf:type owl:Class ;
+                                     rdfs:label "Category" .
+
+
+###  http://neo4j.com/customer/CreditNote
+<http://neo4j.com/customer/CreditNote> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://neo4j.com/customer/Event> ;
+                                       rdfs:comment "requires a creditNoteId property"^^xsd:string ;
+                                       rdfs:label "CreditNote" .
+
+
+###  http://neo4j.com/customer/Customer
+<http://neo4j.com/customer/Customer> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://neo4j.com/customer/Entity> ;
+                                     rdfs:comment "requires a customerId property"^^xsd:string ;
+                                     rdfs:label "Customer" .
+
+
+###  http://neo4j.com/customer/Entity
+<http://neo4j.com/customer/Entity> rdf:type owl:Class ;
+                                   rdfs:label "Entity" .
+
+
+###  http://neo4j.com/customer/Event
+<http://neo4j.com/customer/Event> rdf:type owl:Class ;
+                                  rdfs:label "Event" .
+
+
+###  http://neo4j.com/customer/Item
+<http://neo4j.com/customer/Item> rdf:type owl:Class ;
+                                 rdfs:label "Item" .
+
+
+###  http://neo4j.com/customer/Order
+<http://neo4j.com/customer/Order> rdf:type owl:Class ;
+                                  rdfs:subClassOf <http://neo4j.com/customer/Event> ;
+                                  rdfs:comment "requires an orderId property"^^xsd:string ;
+                                  rdfs:label "Order" .
+
+
+###  http://neo4j.com/customer/Product
+<http://neo4j.com/customer/Product> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://neo4j.com/customer/Item> ;
+                                    rdfs:comment "requires a numeric productCode property. Do not create if no numeric product code is present. should ideally have both a name and description if provided text is available. Where name is short (a few words) and description is long form (sentence or multiple sentences)."^^xsd:string ;
+                                    rdfs:label "Product" .
+
+
+###  http://neo4j.com/customer/ProductCategory
+<http://neo4j.com/customer/ProductCategory> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://neo4j.com/customer/Category> ;
+                                            rdfs:comment "requires a name property"^^xsd:string ;
+                                            rdfs:label "ProductCategory" .
+
+
+###  http://neo4j.com/customer/ProductType
+<http://neo4j.com/customer/ProductType> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://neo4j.com/customer/Category> ;
+                                        rdfs:comment "requires a name property"^^xsd:string ;
+                                        rdfs:label "ProductType" .
+
+
+###  http://neo4j.com/customer/Supplier
+<http://neo4j.com/customer/Supplier> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://neo4j.com/customer/Entity> ;
+                                     rdfs:comment "requires a supplierId property"^^xsd:string ;
+                                     rdfs:label "Supplier" .
+
+
+###  Generated by the OWL API (version 4.5.13) https://github.com/owlcs/owlapi
