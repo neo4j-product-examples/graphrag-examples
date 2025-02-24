@@ -1,6 +1,6 @@
 # Customer Graph - Agentic GraphRAG
 
-This directory contains an end-to-end worked example for building a **GraphRAG-powered agent to accelerate customer and retail analytics**. Covering the entire process from:
+This directory contains an end-to-end worked example for building a **GraphRAG agent to accelerate customer and retail analytics**. Covering the entire process from:
 
 1. **Quickly constructing a graph from mixed unstructured and structured data sources**.
 2. **Resolving and linking entities** in the graph along the way.
@@ -11,7 +11,7 @@ All of this using a central **source-of-truth graph schema** to govern the proce
 
 
 This workflow can be adapted for **analytics, reporting, and Q&A** across various other business domains—especially when:
-- Data sources include a mix of structured and unstructured data
+- Data sources include a **mix of structured and unstructured** data
 - AI needs to navigate a non-trivial **business domain model** for accurate responses
 - The use case requires **flexibility** and the ability to scale to **complex, evolving** AI-driven tasks. 
 
