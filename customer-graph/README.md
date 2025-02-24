@@ -24,7 +24,7 @@ Follow the instructions below to try it yourself! 🚀
 
 2. Have an OpenAI key ready. The costs should be minimal for this example. If you do not have one already you can create an [OpenAI account](https://platform.openai.com/signup) or [sign in](https://platform.openai.com/login). Navigate to the [API key page](https://platform.openai.com/account/api-keys) and "Create new secret key". Optionally naming the key. Save this somewhere safe, and do not share it with anyone.
 
-3. Create .env file by copying .env.template: `cp .env.template .env`. Replace the Neo4j credentials and OpenAI key with your ow from above.
+3. Create .env file by copying .env.template: `cp .env.template .env`. Replace the Neo4j credentials and OpenAI key with your own from above.
 
 ### Configure Python Env
 Create and activate a new python virtual environment.
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 ## Create the Graph from Source Data
 Creating the graph requires ingesting unstructured and structured data. You will use schemas in the [ontos](./ontos) folder to power them.  For more information on how these schemas were generated from a central source, see the __Schema Generation__ section.
 
-The source data is a sample of the [H&M Personalized Fashion Recommendations Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data), real customer purchase data that includes rich information around products including names, types, descriptions. We used ChatGPT to further augment this data - simulating suppliers for the different articles and CreditNotes for returns/refunds. The [data](data) folder contains the resulting structured data (in csvs) & unstructured data in the form of [credit-notes.pdf](data/credit-notes.pdf) representing the return/refund data. 
+The source data is a sample of the [H&M Personalized Fashion Recommendations Dataset](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data), real customer purchase data that includes rich information around products including names, types, descriptions. We used ChatGPT to further augment this data - simulating suppliers for the different articles and CreditNotes for returns/refunds. The [data](data) folder contains the resulting structured data (in csvs) & unstructured data in the form of [credit-notes.pdf](data/credit-notes.pdf) containing the return/refund data. 
 
 > **NOTE:** Please follow the steps in order below, going out of order may result in some conflicting deduplication and indexing issues. 
 
@@ -88,7 +88,7 @@ Select the ellipsis in the top left corner and then select "Open Model" in the d
 Choose [customer-struct-import.json](ontos/customer-struct-import.json) in the ontos folder. The resulting data model should look like the below:
 ![](img/struct-ingest-2-see-model.png)
 
-Now you need to select data sources.  Aura Im port allows you to import from several types of databases, but for today we will use local csvs. Select browse at the top of the Data source panel.
+Now you need to select data sources.  Aura Import allows you to import from several types of databases, but for today we will use local csvs. Select browse at the top of the Data source panel.
 ![](img/struct-ingest-3-get-sources.png)
 
 Select all the csv files in the [data](data) directory. Once complete you should see green check marks on each node and relationship.  When selecting a node you should also see the mapping between node properties and columns in the csvs.
@@ -136,7 +136,7 @@ Some sample questions to try
 > ⚠️ Note: Agentic AI is still an evolving technology and may not always behave as expected out-of-the-box. For example, agents might choose different tools than intended, resulting in errors or bad responses.
 This project provides a minimal agentic example, focusing on GraphRAG enhancement and integration, not on building a fully robust agentic system.
 To add more stability and formalization to agent behavior using Semantic Kernel, see their [docs](https://learn.microsoft.com/en-us/semantic-kernel/).
-For a GraphRAG example with deterministic tools & retrieval queries (instead of agents) on a similar dataset, see [AI for Customers Experience](https://neo4j.com/developer/genai-ecosystem/ai-for-customer-experiences/)
+For a GraphRAG example with deterministic tools & retrieval queries (instead of agents) on a similar dataset, see [GraphRAG for Customers Experience](https://neo4j.com/developer/genai-ecosystem/ai-for-customer-experiences/).
 
 ## Schema Generation
 The single-source graph schema is [customer.ttl](ontos/customer.ttl). It was built in [webprotege](https://webprotege.stanford.edu/) and exported in turtle (ttl) format. The other schemas in the ontos directory are just derivatives of this one and described in more detail below. 
@@ -146,7 +146,7 @@ Per the process described in @jbarrasa's GoingMeta series [S2 episode 5](https:/
 The unstructured ingest (`unstructured_ingest.py`) uses the source ttl schema directly to inform the entity extraction and graph writing process. If you look in the [customer.ttl](ontos/customer.ttl) file you will see "comment" annotations for some classes and properties. These are passed to the LLM to better describe the data schema and improve the entity extraction data quality.   
 
 
-The final schema in the ontos directory is [text-to-cypher.json](ontos/text-to-cypher.json) and it is used by the graphrag application for text2Cypher query generation - specifically in [retial_service.py](graphrag/retial_service.py).  It was generated by running the following query against the database:
+The final schema in the ontos directory is [text-to-cypher.json](ontos/text-to-cypher.json) and it is used by the graphrag application for text2Cypher query generation - specifically in [retail_service.py](graphrag/retail_service.py).  It was generated by running the following query against the database:
 
 ```cypher
 CALL apoc.meta.stats() YIELD relTypes 
