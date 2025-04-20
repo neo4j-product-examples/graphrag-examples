@@ -34,3 +34,6 @@ plotly
 tqdm
 altair<5
 jupyter
+
+#gcp
+google-cloud-bigquery
