@@ -7,6 +7,7 @@ load_dotenv()
 NEO4J_URI=os.getenv("NEO4J_URI")
 NEO4J_USERNAME=os.getenv("NEO4J_USERNAME")
 NEO4J_PASSWORD=os.getenv("NEO4J_PASSWORD")
+NEO4J_DATABASE=os.getenv("NEO4J_DATABASE")
 
 
 
@@ -30,7 +31,7 @@ RETURN count(p) AS propertySetCount
 
 # create text embeddings for products
 print("Creating Product Text Embeddings")
-with driver.session(database="neo4j") as session:
+with driver.session(database=NEO4J_DATABASE) as session:
     session.run('''
     MATCH (n:Product) WHERE size(n.description) <> 0
     WITH collect(n) AS nodes, toInteger(rand()*$numberOfBatches) AS partition
